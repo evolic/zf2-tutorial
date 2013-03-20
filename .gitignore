@@ -1,2 +1,10 @@
 /.settings
 /.buildpath
+/nbproject
+/vendor
+.DS_Store
+Thumbs.db
+/data/cache
+/data/log
+._*
+.~lock.*

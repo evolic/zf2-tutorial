@@ -30,6 +30,12 @@ class AlbumController extends AbstractActionController
 
     public function indexAction()
     {
+        $this->getServiceLocator()->get('Zend\Log')->info(__METHOD__);
+        $this->getServiceLocator()->get('Zend\Log')->debug('This message will go also to FirePHP');
+        // alternative using FirePHP only:
+        $firephp = \FirePHP::getInstance(true);
+        $firephp->log('This message will not go to Zend\Log');
+
         $model = new AlbumModel($this->getEntityManager());
         $albums = $model->getAlbums();
 

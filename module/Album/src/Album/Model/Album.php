@@ -2,73 +2,91 @@
 
 namespace Album\Model;
 
-use Doctrine\ORM\EntityManager,
-    Doctrine\ORM\Query,
-    Doctrine\ORM\Query\Expr\Join,
-    Album\Entity\Album as AlbumEntity;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
 
-class Album
+class Album implements InputFilterAwareInterface
 {
-    /**
-     * @var Doctrine\ORM\EntityManager
-     */
-    protected $em;
+    public $id;
+    public $artist;
+    public $title;
+    protected $inputFilter;
 
-    /**
-     * @var Zend\ServiceManager\ServiceManager
-     */
-    protected $serviceLocator;
-
-
-    public function setEntityManager(EntityManager $em)
+    public function exchangeArray($data)
     {
-        $this->em = $em;
+        $this->id     = (isset($data['id']))     ? $data['id']     : null;
+        $this->artist = (isset($data['artist'])) ? $data['artist'] : null;
+        $this->title  = (isset($data['title']))  ? $data['title']  : null;
     }
 
-    public function getEntityManager()
+     // Add the following method:
+    public function getArrayCopy()
     {
-        return $this->em;
+        return get_object_vars($this);
     }
 
-    public function setServiceLocator(ServiceManager $sl)
+    public function setInputFilter(InputFilterInterface $inputFilter)
     {
-        $this->serviceLocator = $sl;
+        throw new \Exception("Not used");
     }
 
-    public function getServiceLocator()
+    public function getInputFilter()
     {
-        return $this->serviceLocator;
-    }
+        if (!$this->inputFilter) {
+            $inputFilter = new InputFilter();
+            $factory     = new InputFactory();
 
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'id',
+                'required' => true,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+            )));
 
-    public function __construct(EntityManager $em)
-    {
-        $this->setEntityManager($em);
-    }
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'artist',
+                'required' => true,
+                'filters'  => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name'    => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 100,
+                        ),
+                    ),
+                ),
+            )));
 
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'title',
+                'required' => true,
+                'filters'  => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name'    => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 100,
+                        ),
+                    ),
+                ),
+            )));
 
-    public function getAlbums($hydrate = Query::HYDRATE_OBJECT)
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('a')
-            ->from('Album\Entity\Album', 'a')
-            ;
-        $query = $qb->getQuery();
-        $list = $query->getResult($hydrate);
+            $this->inputFilter = $inputFilter;
+        }
 
-        return $list;
-    }
-
-    public function getAlbum($id, $hydrate = Query::HYDRATE_OBJECT)
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('a')
-            ->from('Album\Entity\Album', 'a')
-            ->where('a.id = :id')
-            ;
-        $qb->setParameter('id', $id);
-        $query = $qb->getQuery();
-        $album = $query->getSingleResult($hydrate);
-        return $album;
+        return $this->inputFilter;
     }
 }

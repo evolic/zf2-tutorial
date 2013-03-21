@@ -36,6 +36,15 @@ class AlbumForm extends Form
             ),
         ));
         $this->add(array(
+            'name' => 'discs',
+            'attributes' => array(
+                'type'  => 'text',
+            ),
+            'options' => array(
+                'label' => 'Discs',
+            ),
+        ));
+        $this->add(array(
             'name' => 'submit',
             'attributes' => array(
                 'type'  => 'submit',

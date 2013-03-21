@@ -89,4 +89,30 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+
+    // Doctrine config
+    'doctrine' => array(
+        'driver' => array(
+            'Album_driver' => array(
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => array(
+                    realpath(__DIR__ . '/../../Album/src/Album/Entity'),
+                )
+            ),
+            'Users_driver' => array(
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => array(
+                    realpath(__DIR__ . '/../../Users/src/Users/Entity')
+                )
+            ),
+            'orm_default' => array(
+                'drivers' => array(
+                    'Album\Entity' => 'Album_driver',
+                    'Users\Entity' => 'Users_driver',
+                ),
+            )
+        )
+    ),
 );

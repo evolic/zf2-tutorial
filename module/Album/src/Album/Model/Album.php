@@ -5,9 +5,10 @@ namespace Album\Model;
 use Doctrine\ORM\EntityManager,
     Doctrine\ORM\Query,
     Doctrine\ORM\Query\Expr\Join,
-    Album\Entity\Album as AlbumEntity;
+    Album\Entity\Album as AlbumEntity,
+    Loculus\Model\AbstractModel;
 
-class Album
+class Album extends AbstractModel
 {
     /**
      * @var Doctrine\ORM\EntityManager

@@ -2,32 +2,15 @@
 
 namespace Album\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController,
-    Zend\View\Model\ViewModel,
+use Zend\View\Model\ViewModel,
     Album\Form\AlbumForm,
     Album\Entity\Album,
     Album\Model\Album as AlbumModel,
-    Doctrine\ORM\EntityManager;
+    Doctrine\ORM\EntityManager,
+    Loculus\MVC\Controller\DefaultController;
 
-class AlbumController extends AbstractActionController
+class AlbumController extends DefaultController
 {
-    /**
-    * @var Doctrine\ORM\EntityManager
-    */
-    protected $em;
-
-    public function setEntityManager(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-    public function getEntityManager()
-    {
-        if (null === $this->em) {
-            $this->em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
-        }
-        return $this->em;
-    }
-
     public function indexAction()
     {
         $this->getServiceLocator()->get('Zend\Log')->info(__METHOD__);

@@ -1,5 +1,5 @@
 {
-    "hash": "5b66dab0608b21af9532a118032bb10d",
+    "hash": "ce7c117432253c0116fd15c0cd3f0e6a",
     "packages": [
         {
             "name": "doctrine/common",
@@ -105,7 +105,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/"
                 },
@@ -366,6 +366,88 @@
                 "orm"
             ],
             "time": "2013-01-07 20:05:04"
+        },
+        {
+            "name": "evolic/loculus",
+            "version": "v0.2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/evolic/loculus.git",
+                "reference": "v0.2.1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/evolic/loculus/zipball/v0.2.1.1",
+                "reference": "v0.2.1.1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "zendframework/zendframework": "2.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Loculus": "library/"
+                }
+            },
+            "notification-url": "http://packagist.org/downloads/",
+            "license": [
+                "New BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Tomasz Kuter",
+                    "email": "evolic@interia.pl"
+                }
+            ],
+            "description": "Zend Framework extensions",
+            "homepage": "http://evolic.eu5.org/",
+            "keywords": [
+                "loculus"
+            ],
+            "time": "2013-03-22 21:03:10"
+        },
+        {
+            "name": "firephp/firephp-core",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/firephp/firephp-core.git",
+                "reference": "f60753a8dd7817e4da6bc73e0e717387a9a0866a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/firephp/firephp-core/zipball/f60753a8dd7817e4da6bc73e0e717387a9a0866a",
+                "reference": "f60753a8dd7817e4da6bc73e0e717387a9a0866a",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "lib/FirePHPCore/FirePHP.class.php",
+                    "lib/FirePHPCore/fb.php"
+                ]
+            },
+            "notification-url": "http://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christoph Dorn",
+                    "email": "christoph@christophdorn.com",
+                    "homepage": "http://christophdorn.com"
+                }
+            ],
+            "description": "Traditional FirePHPCore library for sending PHP variables to the browser.",
+            "homepage": "https://github.com/firephp/firephp-core",
+            "time": "2013-01-19 22:55:24"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -1014,7 +1096,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "doctrine/doctrine-orm-module": 20,
-        "gedmo/doctrine-extensions": 20
+        "gedmo/doctrine-extensions": 20,
+        "firephp/firephp-core": 20
     },
     "platform": {
         "php": ">=5.3.3"

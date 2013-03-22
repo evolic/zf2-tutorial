@@ -11,8 +11,6 @@
  * file.
  */
 
-require_once(realpath(__DIR__ . '/../../vendor/firephp/FirePHPCore/FirePHP.php'));
-
 use Zend\Log\Writer\FirePhp,
     Zend\Log\Writer\FirePhp\FirePhpBridge,
     Zend\Log\Writer\Stream,

@@ -8,3 +8,4 @@ Thumbs.db
 /data/log
 ._*
 .~lock.*
+/composer.lock

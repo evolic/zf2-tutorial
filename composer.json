@@ -11,7 +11,9 @@
         "php": ">=5.3.3",
         "zendframework/zendframework": "*",
         "doctrine/Doctrine-ORM-Module": "dev-master",
-        "gedmo/doctrine-extensions": "dev-master"
+        "gedmo/doctrine-extensions": "dev-master",
+        "firephp/firephp-core" : "dev-master",
+        "evolic/loculus": "0.2.*"
     },
     "require-dev": {
       "phpunit/phpunit": "~3.7"

@@ -13,14 +13,9 @@ class AlbumController extends DefaultController
 {
     public function indexAction()
     {
-        $this->getServiceLocator()->get('Zend\Log')->info(__METHOD__);
-        $this->getServiceLocator()->get('Zend\Log')->debug('This message will go also to FirePHP');
-        // alternative using FirePHP only:
-        $firephp = \FirePHP::getInstance(true);
-        $firephp->log('This message will not go to Zend\Log');
-
+        $orderBy = $this->params()->fromRoute('order_by', '');
         $model = new AlbumModel($this->getEntityManager());
-        $albums = $model->getAlbums();
+        $albums = $model->getAlbums($orderBy);
 
         return new ViewModel(array(
             'albums' => $albums
@@ -30,17 +25,19 @@ class AlbumController extends DefaultController
     public function addAction()
     {
         $form = new AlbumForm();
-        $form->get('submit')->setAttribute('label', 'Add');
+        $form->get('submit')->setValue('Add');
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             $album = new Album();
             $form->setInputFilter($album->getInputFilter());
-            $form->setData($request->post());
+            $form->setData($request->getPost());
             if ($form->isValid()) {
                 $album->populate($form->getData());
                 $this->getEntityManager()->persist($album);
                 $this->getEntityManager()->flush();
+
+                $this->flashmessenger()->addSuccessMessage(sprintf('Added new album `%s`', $album->title));
 
                 // Redirect to list of albums
                 return $this->redirect()->toRoute('album');
@@ -52,7 +49,7 @@ class AlbumController extends DefaultController
 
     public function editAction()
     {
-        $id = (int)$this->getEvent()->getRouteMatch()->getParam('id');
+        $id = (int) $this->getEvent()->getRouteMatch()->getParam('id');
         if (!$id) {
             return $this->redirect()->toRoute('album', array('action'=>'add'));
         }
@@ -72,6 +69,8 @@ class AlbumController extends DefaultController
                 $form->bindValues();
                 $this->getEntityManager()->flush();
 
+                $this->flashmessenger()->addSuccessMessage(sprintf('Updating album `%s` successfully completed', $album->title));
+
                 // Redirect to list of albums
                 return $this->redirect()->toRoute('album');
             }
@@ -85,7 +84,7 @@ class AlbumController extends DefaultController
 
     public function deleteAction()
     {
-        $id = (int)$this->getEvent()->getRouteMatch()->getParam('id');
+        $id = (int) $this->getEvent()->getRouteMatch()->getParam('id');
         if (!$id) {
             return $this->redirect()->toRoute('album');
         }

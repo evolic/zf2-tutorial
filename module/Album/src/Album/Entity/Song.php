@@ -2,26 +2,29 @@
 
 namespace Album\Entity;
 
-use Doctrine\ORM\Mapping as ORM,
-    Doctrine\Common\Collections\Collection,
-    Doctrine\Common\Collections\ArrayCollection;
-use Zend\InputFilter\InputFilter;
+use Doctrine\ORM\Mapping as ORM;
+use Loculus\InputFilter\InputFilter;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
+use Zend\Validator\Regex as RegexValidator;
+use Loculus\Filter\Duration as FixDuration;
+use Album\Model\Album as AlbumModel;
 
 /**
  * A music album.
  *
  * @ORM\Entity
- * @ORM\Table(name="album")
- * @property string $artist
- * @property string $title
+ * @ORM\Table(name="songs")
+ * @property int $position
+ * @property string $name
+ * @property time $duration
+ * @property int $disc
  * @property int $id
- * @property int $discs
- * @property Collection $songs
+ * @property Album $album
+ * @property int $album_id
  */
-class Album implements InputFilterAwareInterface
+class Song implements InputFilterAwareInterface
 {
     protected $inputFilter;
 
@@ -33,32 +36,40 @@ class Album implements InputFilterAwareInterface
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      */
-    protected $artist;
+    protected $position;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=63)
      */
-    protected $title;
+    protected $name;
+
+    /**
+     * @ORM\Column(type="time")
+     */
+    protected $duration;
 
     /**
      * @ORM\Column(type="integer", options={"default"=1})
      */
-    protected $discs;
+    protected $disc;
 
     /**
-     *
-     * @var Doctrine\Common\Collections\ArrayCollection $songs
-     * @ORM\OneToMany(targetEntity="Song", mappedBy="album", cascade={"persist","remove"})
+     * @ORM\Column(type="integer")
      */
-    protected $songs;
+    protected $album_id;
 
-
-    public function __construct() {
-        $this->songs = new ArrayCollection();
-    }
-
+    /**
+     * Album instance
+     *
+     * @var Album\Entity\Album
+     * @ORM\ManyToOne(targetEntity="Album", inversedBy="songs")
+     * @ORM\JoinColumns({
+     *  @ORM\JoinColumn(name="album_id", referencedColumnName="id")
+     * })
+     */
+    protected $album;
 
     /**
      * Magic getter to expose protected properties.
@@ -100,10 +111,13 @@ class Album implements InputFilterAwareInterface
      */
     public function populate($data = array())
     {
-        $this->id     = $data['id'];
-        $this->artist = $data['artist'];
-        $this->title  = $data['title'];
-        $this->discs  = $data['discs'];
+        $this->id       = $data['id'];
+        $this->position = $data['position'];
+        $this->name     = $data['name'];
+        $this->duration = new \DateTime($data['duration']);
+        $this->disc     = $data['disc'];
+        $this->album_id = $data['album_id'];
+        $this->album    = isset($data['album']) ? $data['album'] : null;
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -127,7 +141,7 @@ class Album implements InputFilterAwareInterface
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'artist',
+                'name'     => 'name',
                 'required' => true,
                 'filters'  => array(
                     array('name' => 'StripTags'),
@@ -139,35 +153,37 @@ class Album implements InputFilterAwareInterface
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min'      => 1,
-                            'max'      => 100,
+                            'max'      => 63,
                         ),
                     ),
                 ),
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'title',
+                'name'     => 'duration',
                 'required' => true,
                 'filters'  => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
+                    new FixDuration(),
                 ),
                 'validators' => array(
                     array(
                         'name'    => 'StringLength',
                         'options' => array(
                             'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 100,
+                            'min'      => 5,
+                            'max'      => 8,
                         ),
                     ),
+                    new RegexValidator('/^\d\d:\d\d(:\d\d)?$/'),
                 ),
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'       => 'discs',
-                'required'   => true,
-                'filters' => array(
+                'name'     => 'disc',
+                'required' => true,
+                'filters'  => array(
                     array('name'    => 'Int'),
                 ),
             )));

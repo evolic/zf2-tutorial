@@ -10,50 +10,25 @@ use Doctrine\ORM\EntityManager,
 
 class Album extends AbstractModel
 {
-    /**
-     * @var Doctrine\ORM\EntityManager
-     */
-    protected $em;
-
-    /**
-     * @var Zend\ServiceManager\ServiceManager
-     */
-    protected $serviceLocator;
-
-
-    public function setEntityManager(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-
-    public function getEntityManager()
-    {
-        return $this->em;
-    }
-
-    public function setServiceLocator(ServiceManager $sl)
-    {
-        $this->serviceLocator = $sl;
-    }
-
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
-    }
-
-
-    public function __construct(EntityManager $em)
-    {
-        $this->setEntityManager($em);
-    }
-
-
-    public function getAlbums($hydrate = Query::HYDRATE_OBJECT)
+    public function getAlbums($orderBy = null, $hydrate = Query::HYDRATE_OBJECT)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('a')
             ->from('Album\Entity\Album', 'a')
             ;
+        if (isset($orderBy)) {
+            switch ($orderBy) {
+                case 'artist':
+                    $orderColumn = 'a.artist';
+                    break;
+                case 'title':
+                    $orderColumn = 'a.title';
+                    break;
+                default:
+                    $orderColumn = 'a.id';
+            }
+            $qb->orderBy($orderColumn);
+        }
         $query = $qb->getQuery();
         $list = $query->getResult($hydrate);
 

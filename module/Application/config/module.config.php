@@ -10,7 +10,7 @@ return array(
                         'lang' => '[a-z]{2}(-[A-Z]{2}){0,1}'
                     ),
                     'defaults' => array(
-                        'controller' => 'Album\Controller\Album',
+                        'controller' => 'album/album',
                         'action'     => 'index'
                     ),
                 ),
@@ -97,14 +97,16 @@ return array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
                 'paths' => array(
-                    realpath(__DIR__ . '/../../Album/src/Album/Entity'),
+//                     realpath(__DIR__ . '/../../Album/src/Album/Entity'),
+                    str_replace('\\', '/', realpath(__DIR__ . '/../../Album/src/Album/Entity')) // windows
                 )
             ),
             'Users_driver' => array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
                 'paths' => array(
-                    realpath(__DIR__ . '/../../Users/src/Users/Entity')
+//                     realpath(__DIR__ . '/../../Users/src/Users/Entity')
+                    str_replace('\\', '/', realpath(__DIR__ . '/../../Album/src/Album/Entity')) // windows
                 )
             ),
             'orm_default' => array(

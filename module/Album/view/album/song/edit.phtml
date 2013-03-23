@@ -1,0 +1,29 @@
+<?php
+// module/Album/view/album/album/edit.phtml:
+
+$title = 'Edit song';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($this->album->title); ?></h1>
+<h2><?php echo $this->escapeHtml($title); ?></h2>
+
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url(
+    'song',
+    array(
+        'action' => 'edit',
+        'id'     => $this->id,
+    )
+));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+echo $this->formHidden($form->get('album_id'));
+echo $this->formRow($form->get('position'));
+echo $this->formRow($form->get('name'));
+echo $this->formRow($form->get('duration'));
+echo $this->formRow($form->get('disc'));
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();

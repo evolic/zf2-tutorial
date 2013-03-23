@@ -1,0 +1,38 @@
+<?php
+$title = $album->title . '\'s songs';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<p><a href="<?php echo $this->url('song', array('action'=>'add', 'album_id' => $album->id));?>">
+    Add new song</a></p>
+
+<?php if ($songs): ?>
+<table class="table">
+<tr>
+    <th><a href="<?php echo $this->url('song', array('action'=>'index', 'album_id' => $album->id, 'order_by' => 'position'));?>">Position</a></th>
+    <th><a href="<?php echo $this->url('song', array('action'=>'index', 'album_id' => $album->id, 'order_by' => 'name'));?>">Song</a></th>
+    <th><a href="<?php echo $this->url('song', array('action'=>'index', 'album_id' => $album->id, 'order_by' => 'duration'));?>">Duration</a></th>
+    <th>Disc</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach($songs as $song) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($song->position);?></td>
+    <td>
+        <a href="<?php echo $this->url('song',
+            array('action'=>'index', 'album_id' => $song->id));?>"><?php echo $this->escapeHtml($song->name);?></a>
+    </td>
+    <td><?php echo $this->escapeHtml($song->duration->format('i:s'));?></td>
+    <td><?php echo $this->escapeHtml($song->disc);?></td>
+    <td>
+        <a href="<?php echo $this->url('song',
+            array('action'=>'edit', 'id' => $song->id));?>">Edit</a>
+        <a href="<?php echo $this->url('song',
+            array('action'=>'delete', 'id' => $song->id));?>">Delete</a>
+    </td>
+</tr>
+<?php endforeach; ?>
+</table>
+<?php else:?>
+<p>No song was found.</p>
+<?php endif; ?>

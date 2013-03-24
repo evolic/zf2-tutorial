@@ -2,14 +2,22 @@
 
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Loculus\MVC\Controller\DefaultController;
 
-class IndexController extends AbstractActionController
+class IndexController extends DefaultController
 {
     public function indexAction()
     {
-        return new ViewModel();
+        return $this->viewModel;
     }
 
+    public function zf2Action()
+    {
+        return $this->viewModel;
+    }
+
+    public function notSupportedLocaleAction()
+    {
+        return $this->viewModel;
+    }
 }

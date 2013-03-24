@@ -33,5 +33,12 @@ return array(
                 return $log;
             },
         )
+    ),
+    'locales' => array(
+        'default' => 'en-US',
+        'list' => array(
+            'en-US' => 'English',
+            'pl-PL' => 'Polski',
+        )
     )
 );

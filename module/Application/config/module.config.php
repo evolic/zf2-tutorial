@@ -2,12 +2,23 @@
 return array(
     'router' => array(
         'routes' => array(
+            'choose-lang' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller'    => 'Index',
+                        'action'        => 'index',
+                    ),
+                ),
+            ),
             'home' => array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
-                    'route'    => '/[:lang]',
+                    'route'    => '/:locale',
                     'constraints' => array(
-                        'lang' => '[a-z]{2}(-[A-Z]{2}){0,1}'
+                        'locale' => '[a-z]{2}(-[A-Z]{2}){0,1}'
                     ),
                     'defaults' => array(
                         'controller' => 'album/album',
@@ -22,9 +33,9 @@ return array(
             'application' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'    => '[/:lang]/application',
+                    'route'    => '[/:locale]/application',
                     'constraints' => array(
-                        'lang' => '[a-z]{2}(-[A-Z]{2}){0,1}'
+                        'locale' => '[a-z]{2}(-[A-Z]{2}){0,1}'
                     ),
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
@@ -48,6 +59,20 @@ return array(
                     ),
                 ),
             ),
+            'not_supported_locale' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'    => '[/:locale]/not-supported-locale.html',
+                    'constraints' => array(
+                        'locale' => '[a-z]{2}(-[A-Z]{2}){0,1}'
+                    ),
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller'    => 'Index',
+                        'action'        => 'not-supported-locale',
+                    ),
+                ),
+            )
         ),
     ),
     'service_manager' => array(
@@ -59,12 +84,18 @@ return array(
         ),
     ),
     'translator' => array(
-        'locale' => 'en_US',
+        'locale' => 'en-US',
         'translation_file_patterns' => array(
             array(
                 'type'     => 'gettext',
                 'base_dir' => __DIR__ . '/../language',
                 'pattern'  => '%s.mo',
+            ),
+            array(
+                'type'     => 'phparray',
+                'base_dir' => __DIR__ . '/../../Album/language',
+                'pattern'  => '%s.php',
+                'text_domain' => 'album'
             ),
         ),
     ),

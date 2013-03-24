@@ -1,7 +1,7 @@
 <?php
 // module/Album/view/album/album/edit.phtml:
 
-$title = 'Edit song';
+$title = $this->translate('Edit song');
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($this->album->title); ?></h1>
@@ -12,6 +12,7 @@ $form = $this->form;
 $form->setAttribute('action', $this->url(
     'song',
     array(
+        'locale' => $this->locale,
         'action' => 'edit',
         'id'     => $this->id,
     )

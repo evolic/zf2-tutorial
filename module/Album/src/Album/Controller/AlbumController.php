@@ -13,19 +13,25 @@ class AlbumController extends DefaultController
 {
     public function indexAction()
     {
+        $locale = $this->params()->fromRoute('locale');
         $orderBy = $this->params()->fromRoute('order_by', '');
         $model = new AlbumModel($this->getEntityManager());
         $albums = $model->getAlbums($orderBy);
 
-        return new ViewModel(array(
+        $this->viewModel->setVariables(array(
             'albums' => $albums
         ));
+        return $this->viewModel;
     }
 
     public function addAction()
     {
+        $locale = $this->params()->fromRoute('locale');
+        $firephp = \FirePHP::getInstance(true);
+        $firephp->info(__METHOD__);
+
         $form = new AlbumForm();
-        $form->get('submit')->setValue('Add');
+        $form->get('submit')->setValue($this->translate('Add'));
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -40,18 +46,23 @@ class AlbumController extends DefaultController
                 $this->flashmessenger()->addSuccessMessage(sprintf('Added new album `%s`', $album->title));
 
                 // Redirect to list of albums
-                return $this->redirect()->toRoute('album');
+                return $this->redirect()->toRoute('album', array('locale' => $locale));
             }
         }
 
-        return array('form' => $form);
+        $this->viewModel->setVariables(array(
+            'form' => $form
+        ));
+
+        return $this->viewModel;
     }
 
     public function editAction()
     {
-        $id = (int) $this->getEvent()->getRouteMatch()->getParam('id');
+        $locale = $this->params()->fromRoute('locale');
+        $id = (int) $this->params()->fromRoute('id');
         if (!$id) {
-            return $this->redirect()->toRoute('album', array('action'=>'add'));
+            return $this->redirect()->toRoute('album', array('action'=>'add', 'locale' => $locale));
         }
 
         $model = new AlbumModel($this->getEntityManager());
@@ -60,7 +71,7 @@ class AlbumController extends DefaultController
         $form = new AlbumForm();
         $form->setBindOnValidate(false);
         $form->bind($album);
-        $form->get('submit')->setValue('Save');
+        $form->get('submit')->setValue($this->translate('Save'));
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -72,21 +83,23 @@ class AlbumController extends DefaultController
                 $this->flashmessenger()->addSuccessMessage(sprintf('Updating album `%s` successfully completed', $album->title));
 
                 // Redirect to list of albums
-                return $this->redirect()->toRoute('album');
+                return $this->redirect()->toRoute('album', array('locale' => $locale));
             }
         }
 
-        return array(
+        $this->viewModel->setVariables(array(
             'id' => $id,
             'form' => $form,
-        );
+        ));
+        return $this->viewModel;
     }
 
     public function deleteAction()
     {
-        $id = (int) $this->getEvent()->getRouteMatch()->getParam('id');
+        $locale = $this->params()->fromRoute('locale');
+        $id = (int) $this->params()->fromRoute('id');
         if (!$id) {
-            return $this->redirect()->toRoute('album');
+            return $this->redirect()->toRoute('album', array('locale' => $locale));
         }
 
         $model = new AlbumModel($this->getEntityManager());
@@ -94,7 +107,7 @@ class AlbumController extends DefaultController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $del = $request->getPost('del', 'No');
-            if ($del == 'Yes') {
+            if ($del == $this->translate('Yes')) {
                 $id = (int) $request->getPost('id');
 
                 $model = new AlbumModel($this->getEntityManager());
@@ -107,14 +120,13 @@ class AlbumController extends DefaultController
             }
 
             // Redirect to list of albums
-            return $this->redirect()->toRoute('album', array(
-                'action' => 'index',
-            ));
+            return $this->redirect()->toRoute('album', array('locale' => $locale));
         }
 
-        return array(
+        $this->viewModel->setVariables(array(
             'id' => $id,
             'album' => $model->getAlbum($id)
-        );
+        ));
+        return $this->viewModel;
     }
 }

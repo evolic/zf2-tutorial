@@ -1,6 +1,7 @@
 <?php
 // module/Album/view/album/album/edit.phtml:
-
+$firephp = \FirePHP::getInstance();
+$firephp->info($this->locale);
 $title = 'Edit album';
 $this->headTitle($title);
 ?>
@@ -11,6 +12,7 @@ $form = $this->form;
 $form->setAttribute('action', $this->url(
     'album',
     array(
+        'locale' => $this->locale,
         'action' => 'edit',
         'id'     => $this->id,
     )

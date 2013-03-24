@@ -17,44 +17,47 @@ class SongController extends DefaultController
 {
     public function indexAction()
     {
+        $locale = $this->params()->fromRoute('locale');
         $album_id = (int) $this->params()->fromRoute('album_id', 0);
         $orderBy = $this->params()->fromRoute('order_by', '');
 
         if (!$album_id) {
-            return $this->redirect()->toRoute('album');
+            return $this->redirect()->toRoute('album', array('locale' => $locale));
         }
 
         $albumModel = new AlbumModel($this->getEntityManager());
         $album = $albumModel->getAlbum($album_id);
         if (!$album) {
-            return $this->redirect()->toRoute('album');
+            return $this->redirect()->toRoute('album', array('locale' => $locale));
         }
 
         $songModel = new SongModel($this->getEntityManager());
         $songModel->setServiceLocator($this->getServiceLocator());
         $songs = $songModel->getSongsByAlbum($album_id, $orderBy);
 
-        return new ViewModel(array(
+        $this->viewModel->setVariables(array(
             'album' => $album,
             'songs' => $songs
         ));
+        return $this->viewModel;
     }
 
     public function addAction()
     {
+        $locale = $this->params()->fromRoute('locale');
         $album_id = (int) $this->params()->fromRoute('album_id', 0);
         if (!$album_id) {
-            return $this->redirect()->toRoute('album');
+            return $this->redirect()->toRoute('album', array('locale' => $locale));
         }
 
         $albumModel = new AlbumModel($this->getEntityManager());
         $album = $albumModel->getAlbum($album_id);
         if (!$album) {
-            return $this->redirect()->toRoute('album');
+            return $this->redirect()->toRoute('album', array('locale' => $locale));
         }
 
         $form = new SongForm('song-add', $album->discs);
-        $form->get('submit')->setValue('Add');
+        $form->get('submit')->setValue($this->translate('Add'));
         $form->get('album_id')->setValue($album->id);
 
         $request = $this->getRequest();
@@ -72,17 +75,22 @@ class SongController extends DefaultController
                 $this->getEntityManager()->flush();
 
                 // Redirect to list of songs
-                return $this->redirect()->toRoute('song',array('album_id' => $album->id));
+                return $this->redirect()->toRoute('song', array(
+                    'locale' => $locale,
+                    'album_id' => $album->id
+                ));
             }
         }
-        return array(
+        $this->viewModel->setVariables(array(
             'form' => $form,
             'album' => $album
-        );
+        ));
+        return $this->viewModel;
     }
 
     public function editAction()
     {
+        $locale = $this->params()->fromRoute('locale');
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->redirect()->toRoute('song', array(
@@ -94,19 +102,19 @@ class SongController extends DefaultController
         $songModel->setServiceLocator($this->getServiceLocator());
         $song = $songModel->getSong($id);
         if (!$song) {
-            return $this->redirect()->toRoute('album');
+            return $this->redirect()->toRoute('album', array('locale' => $locale));
         }
 
         $albumModel = new AlbumModel($this->getEntityManager());
         $album = $albumModel->getAlbum($song->album_id);
         if (!$album) {
-            return $this->redirect()->toRoute('album');
+            return $this->redirect()->toRoute('album', array('locale' => $locale));
         }
 
         $form = new SongForm();
         $form->setBindOnValidate(false);
         $form->bind($song);
-        $form->get('submit')->setValue('Edit');
+        $form->get('submit')->setValue($this->translate('Edit'));
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -122,19 +130,24 @@ class SongController extends DefaultController
                 $this->getEntityManager()->flush();
 
                 // Redirect to list of songs
-                return $this->redirect()->toRoute('song',array('album_id' => $song->album_id));
+                return $this->redirect()->toRoute('song', array(
+                    'locale' => $locale,
+                    'album_id' => $song->album_id
+                ));
             }
         }
 
-        return array(
+        $this->viewModel->setVariables(array(
             'id' => $id,
             'form' => $form,
             'album' => $album
-        );
+        ));
+        return $this->viewModel;
     }
 
     public function deleteAction()
     {
+        $locale = $this->params()->fromRoute('locale');
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->redirect()->toRoute('album');
@@ -144,34 +157,36 @@ class SongController extends DefaultController
         $songModel->setServiceLocator($this->getServiceLocator());
         $song = $songModel->getSong($id);
         if (!$song) {
-            return $this->redirect()->toRoute('album');
+            return $this->redirect()->toRoute('album', array('locale' => $locale));
         }
 
         $albumModel = new AlbumModel($this->getEntityManager());
         $album = $albumModel->getAlbum($song->album_id);
         if (!$album) {
-            return $this->redirect()->toRoute('album');
+            return $this->redirect()->toRoute('album', array('locale' => $locale));
         }
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             $del = $request->getPost('del', 'No');
 
-            if ($del == 'Yes') {
+            if ($del == $this->translate('Yes')) {
                 $this->getEntityManager()->remove($song);
                 $this->getEntityManager()->flush();
             }
 
             // Redirect to list of albums
             return $this->redirect()->toRoute('song', array(
+                'locale' => $locale,
                 'album_id' => $song->album_id
             ));
         }
 
-        return array(
+        $this->viewModel->setVariables(array(
             'id' => $id,
             'album' => $album,
             'song' => $song
-        );
+        ));
+        return $this->viewModel;
     }
 }

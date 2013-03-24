@@ -1,24 +1,31 @@
 <?php
 // module/Album/view/album/album/index.phtml:
-
+$firephp = \FirePHP::getInstance();
+$firephp->info($this->locale);
 $title = 'My albums';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <p>
-    <a href="<?php echo $this->url('album', array('action'=>'add'));?>">Add new album</a>
+    <a href="<?php echo $this->url('album', array(
+        'locale' => $this->locale,
+        'action'=>'add'
+    ));?>"><?php echo $this->translate('Add new album'); ?></a>
 </p>
 
+<?php if ($albums): ?>
 <table class="table">
 <tr>
     <th><a href="<?php echo $this->url('album', array(
+        'locale' => $this->locale,
         'action'=>'index',
         'order_by' => 'artist',
-    ));?>">Artist</a></th>
+    ));?>"><?php echo $this->translate('Artist'); ?></a></th>
     <th><a href="<?php echo $this->url('album', array(
+        'locale' => $this->locale,
         'action'=>'index',
         'order_by' => 'title',
-    ));?>">Title</a></th>
+    ));?>"><?php echo $this->translate('Title'); ?></a></th>
     <th>&nbsp;</th>
 </tr>
 <?php foreach ($albums as $album) : ?>
@@ -26,14 +33,28 @@ $this->headTitle($title);
     <td><?php echo $this->escapeHtml($album->artist);?></td>
     <td>
         <a href="<?php echo $this->url('song',
-            array('action'=>'index', 'album_id' => $album->id));?>"><?php echo $this->escapeHtml($album->title);?></a>
+            array('locale' => $this->locale, 'action'=>'index', 'album_id' => $album->id));?>">
+          <?php echo $this->escapeHtml($album->title);?>
+        </a>
     </td>
     <td>
         <a href="<?php echo $this->url('album',
-            array('action'=>'edit', 'id' => $album->id));?>">Edit</a>
+            array('locale' => $this->locale, 'action'=>'edit', 'id' => $album->id));?>"><?php echo $this->translate('Edit'); ?></a>
         <a href="<?php echo $this->url('album',
-            array('action'=>'delete', 'id' => $album->id));?>">Delete</a>
+            array('locale' => $this->locale, 'action'=>'delete', 'id' => $album->id));?>"><?php echo $this->translate('Delete'); ?></a>
     </td>
 </tr>
 <?php endforeach; ?>
 </table>
+
+<p><?php
+$count = count($albums);
+$message = $this->translatePlural('Found %d album.', 'Found %d albums.', $count, 'album', $this->locale);
+// for ($i = 0; $i < 35; $i++) {
+//     $firephp->info(sprintf($this->translatePlural('Found %d album.', 'Found %d albums.', $i, 'album', $this->locale), $i));
+// }
+echo sprintf($message, $count);
+?></p>
+<?php else:?>
+<p><?php echo $this->translate('No album was found.'); ?></p>
+<?php endif; ?>

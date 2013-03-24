@@ -46,4 +46,10 @@ class Module
     {
         return include __DIR__ . '/config/module.config.php';
     }
+
+    public function onBootstrap($e)
+    {
+        $firephp = \FirePHP::getInstance(true);
+        $firephp->info(__METHOD__);
+    }
 }

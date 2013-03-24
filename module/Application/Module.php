@@ -3,44 +3,44 @@
 namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
+use Zend\Http\Response;
 
 class Module
 {
     public function onBootstrap($e)
     {
-        $session = $e->getApplication()->getServiceManager()->get('session');
-        if (isset($session->lang)) {
-            $translator = $e->getApplication()->getServiceManager()->get('translator');
-            $translator->setLocale($session->lang);
-
-            $viewModel = $e->getViewModel();
-            $viewModel->lang = str_replace('_', '-', $session->lang);
-        }
         $eventManager = $e->getApplication()->getEventManager();
+        $eventManager->attach('route', function ($event) {
+            $session = $event->getApplication()->getServiceManager()->get('session');
+            $sm = $event->getApplication()->getServiceManager();
+            $config = $event->getApplication()->getServiceManager()->get('Configuration');
+            $localesConfig = $config['locales'];
+            $locales = $localesConfig['list'];
+            $locale = $event->getRouteMatch()->getParam('locale');
 
-        $eventManager->attach('route', function ($e) {
-            $lang = $e->getRouteMatch()->getParam('lang');
-
-            // If there is no lang parameter in the route, nothing to do
-            if (empty($lang)) {
-                return;
+            // unsupported locale provided
+            if (!in_array($locale, array_keys($locales)) && $_SERVER['REQUEST_URI'] !== '/') {
+                $locale = $localesConfig['default'];
+                $url = $event->getRouter()->assemble(array(
+                    'locale' => $localesConfig['default']
+                ), array('name' => 'home'));
+                $response = $event->getApplication()->getResponse();
+                $response->getHeaders()->addHeaderLine('Location', $url);
+                $response->setStatusCode(Response::STATUS_CODE_302);
+                $response->sendHeaders();
+                exit;
             }
 
-            $services = $e->getApplication()->getServiceManager();
-
-            // If the session language is the same, nothing to do
-            $session = $services->get('session');
-            if (isset($session->lang) && ($session->lang == $lang)) {
-                return;
+            // If there is no lang parameter in the route, switch to default locale
+            if (empty($locale)) {
+                $locale = $localesConfig['default'];
             }
 
-            $viewModel  = $e->getViewModel();
-            $translator = $services->get('translator');
+            $translator = $sm->get('translator');
+            $translator->setLocale($locale);
 
-            $viewModel->lang = $lang;
-            $lang = str_replace('-', '_', $lang);
-            $translator->setLocale($lang);
-            $session->lang = $lang;
+            $session->locale = $locale;
+            $session->locales = $locales;
         }, -10);
 
         $moduleRouteListener = new ModuleRouteListener();

@@ -1,5 +1,10 @@
 <?php echo $this->doctype(); ?>
-
+<?php
+// module/Album/view/album/album/index.phtml:
+$firephp = \FirePHP::getInstance();
+$firephp->info($this->locale);
+$firephp->info($locale);
+?>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -30,21 +35,17 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Skeleton Application') ?></a>
+          <a class="brand" href="<?php echo $this->url('home', array('locale' => $this->locale)); ?>"><?php echo $this->translate('Skeleton Application') ?></a>
 
           <div class="dropdown" style="float:right">
               <?php echo $this->partial('layout/languages.phtml', array(
-                    'lang' => array(
-                        'English'  => 'en-US',
-                        'Français' => 'fr-FR',
-                        'Deutsch'  => 'de-DE',
-                    ),
-                    'selected' => $this->lang,
+                    'locales' => $this->locales,
+                    'selected' => $this->locale,
               )); ?>
           </div>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
+              <li class="active"><a href="<?php echo $this->url('home', array('locale' => $this->locale)); ?>"><?php echo $this->translate('Home') ?></a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

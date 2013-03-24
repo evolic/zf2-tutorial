@@ -1,18 +1,40 @@
 <?php
-$title = $album->title . '\'s songs';
+// module/Album/view/album/song/index.phtml:
+$firephp = \FirePHP::getInstance();
+$firephp->info($this->locale);
+$title = sprintf($this->translate('%s\'s songs'), $album->title);
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
-<p><a href="<?php echo $this->url('song', array('action'=>'add', 'album_id' => $album->id));?>">
-    Add new song</a></p>
+<p><a href="<?php echo $this->url('song', array(
+    'locale' => $this->locale, 'action'=>'add', 'album_id' => $album->id
+));?>"><?php echo $this->translate('Add new song'); ?></a></p>
 
 <?php if ($songs): ?>
 <table class="table">
 <tr>
-    <th><a href="<?php echo $this->url('song', array('action'=>'index', 'album_id' => $album->id, 'order_by' => 'position'));?>">Position</a></th>
-    <th><a href="<?php echo $this->url('song', array('action'=>'index', 'album_id' => $album->id, 'order_by' => 'name'));?>">Song</a></th>
-    <th><a href="<?php echo $this->url('song', array('action'=>'index', 'album_id' => $album->id, 'order_by' => 'duration'));?>">Duration</a></th>
-    <th>Disc</th>
+    <th><a href="<?php echo $this->url('song', array(
+            'locale' => $this->locale,
+            'action'=>'index',
+            'album_id' => $album->id,
+            'order_by' => 'position'
+        ));?>"><?php echo $this->translate('Position'); ?></a>
+    </th>
+    <th><a href="<?php echo $this->url('song', array(
+            'locale' => $this->locale,
+            'action'=>'index',
+            'album_id' => $album->id,
+            'order_by' => 'name'
+        ));?>"><?php echo $this->translate('Song'); ?></a>
+    </th>
+    <th><a href="<?php echo $this->url('song', array(
+            'locale' => $this->locale,
+            'action'=>'index',
+            'album_id' => $album->id,
+            'order_by' => 'duration'
+        ));?>"><?php echo $this->translate('Duration'); ?></a>
+    </th>
+    <th><?php echo $this->translate('Disc'); ?></th>
     <th>&nbsp;</th>
 </tr>
 <?php foreach($songs as $song) : ?>
@@ -20,19 +42,27 @@ $this->headTitle($title);
     <td><?php echo $this->escapeHtml($song->position);?></td>
     <td>
         <a href="<?php echo $this->url('song',
-            array('action'=>'index', 'album_id' => $song->id));?>"><?php echo $this->escapeHtml($song->name);?></a>
+            array('locale' => $this->locale, 'action'=>'index', 'album_id' => $song->id));?>">
+            <?php echo $this->escapeHtml($song->name);?>
+        </a>
     </td>
     <td><?php echo $this->escapeHtml($song->duration->format('i:s'));?></td>
     <td><?php echo $this->escapeHtml($song->disc);?></td>
     <td>
         <a href="<?php echo $this->url('song',
-            array('action'=>'edit', 'id' => $song->id));?>">Edit</a>
+            array('locale' => $this->locale, 'action'=>'edit', 'id' => $song->id));?>"><?php echo $this->translate('Edit'); ?></a>
         <a href="<?php echo $this->url('song',
-            array('action'=>'delete', 'id' => $song->id));?>">Delete</a>
+            array('locale' => $this->locale, 'action'=>'delete', 'id' => $song->id));?>"><?php echo $this->translate('Delete'); ?></a>
     </td>
 </tr>
 <?php endforeach; ?>
 </table>
+
+<p><?php
+$count = count($songs);
+$message = $this->translatePlural('Found %d song in album.', 'Found %d songs in album.', $count, 'album', $this->locale);
+echo sprintf($message, $count);
+?></p>
 <?php else:?>
-<p>No song was found.</p>
+<p><?php echo $this->translate('No song was found.'); ?></p>
 <?php endif; ?>

@@ -40,7 +40,7 @@ return array(
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Index',
-                        'action'        => 'index',
+                        'action'        => 'zf2',
                     ),
                 ),
                 'may_terminate' => true,

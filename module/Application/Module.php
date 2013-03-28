@@ -42,7 +42,6 @@ class Module
             $translator->setLocale($locale);
 
             $session->locale = $locale;
-            $session->locales = $locales;
         }, -10);
 
         $moduleRouteListener = new ModuleRouteListener();

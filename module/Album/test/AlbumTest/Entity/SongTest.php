@@ -124,6 +124,6 @@ class SongTest extends EntityTestCase
         $this->assertEquals(false, $song);
 
         $dbh = $this->em->getConnection();
-        $result = $dbh->exec("UPDATE sqlite_sequence SET seq = seq - 1 WHERE name='song';");
+        $result = $dbh->exec("UPDATE sqlite_sequence SET seq = 7 WHERE name='song';");
     }
 }

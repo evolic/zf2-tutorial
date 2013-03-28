@@ -72,6 +72,6 @@ class AlbumTest extends EntityTestCase
         $this->assertEquals(false, $album);
 
         $dbh = $this->em->getConnection();
-        $result = $dbh->exec("UPDATE sqlite_sequence SET seq = seq - 1 WHERE name='album';");
+        $result = $dbh->exec("UPDATE sqlite_sequence SET seq = 10 WHERE name='album';");
     }
 }

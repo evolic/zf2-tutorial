@@ -2,27 +2,12 @@
 
 namespace AlbumTest\Entity;
 
-use Doctrine\ORM\EntityManager;
-use Zend\ServiceManager\ServiceManager;
 use AlbumTest\Bootstrap;
 use Album\Entity\Album;
-use PHPUnit_Framework_TestCase;
+use Loculus\Test\PHPUnit\Entity\EntityTestCase;
 
-class AlbumTest extends PHPUnit_Framework_TestCase
+class AlbumTest extends EntityTestCase
 {
-    /**
-     * Service Manager
-     * @var Zend\ServiceManager\ServiceManager
-     */
-    protected $sm;
-
-    /**
-     * Doctrine Entity Manager
-     * @var Doctrine\ORM\EntityManager
-     */
-    protected $em;
-
-
     public function setUp()
     {
         $this->sm = Bootstrap::getServiceManager();
@@ -88,14 +73,5 @@ class AlbumTest extends PHPUnit_Framework_TestCase
 
         $dbh = $this->em->getConnection();
         $result = $dbh->exec("UPDATE sqlite_sequence SET seq = seq - 1 WHERE name='album';");
-    }
-
-
-    public function tearDown()
-    {
-        unset($this->sm);
-        unset($this->em);
-
-        parent::tearDown();
     }
 }

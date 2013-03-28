@@ -2,26 +2,10 @@
 namespace AlbumTest\Controller;
 
 use Zend\Http\Request as HttpRequest;
-use Zend\I18n\Translator\Translator;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Loculus\Test\PHPUnit\Controller\HttpControllerTestCase;
 
-class AlbumControllerTest extends AbstractHttpControllerTestCase
+class AlbumControllerTest extends HttpControllerTestCase
 {
-     /**
-     * Instance of Zend Translator
-     * @var Zend\I18n\Translator\Translator
-     */
-    protected $translator;
-
-    public function translate($text)
-    {
-        if ($this->translator === null) {
-            $this->translator = $this->getApplicationServiceLocator()->get('translator');
-        }
-
-        return $this->translator->translate($text);
-    }
-
     public function setUp()
     {
         $this->setApplicationConfig(

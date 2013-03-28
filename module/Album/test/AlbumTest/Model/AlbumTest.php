@@ -3,32 +3,12 @@
 namespace AlbumTest\Model;
 
 
-use Doctrine\ORM\EntityManager;
-use Zend\ServiceManager\ServiceManager;
 use AlbumTest\Bootstrap;
 use Album\Model\Album as AlbumModel;
-use PHPUnit_Framework_TestCase;
+use Loculus\Test\PHPUnit\Model\ModelTestCase;
 
-class AlbumTest extends PHPUnit_Framework_TestCase
+class AlbumTest extends ModelTestCase
 {
-    /**
-     * Service Manager
-     * @var Zend\ServiceManager\ServiceManager
-     */
-    protected $sm;
-
-    /**
-     * Doctrine Entity Manager
-     * @var Doctrine\ORM\EntityManager
-     */
-    protected $em;
-
-    /**
-     * Album model
-     * @var Album\Model\Album
-     */
-    protected $model;
-
     public function setUp()
     {
         $this->sm = Bootstrap::getServiceManager();
@@ -79,14 +59,5 @@ class AlbumTest extends PHPUnit_Framework_TestCase
         $album = $this->model->getAlbum(100);
         $this->assertNotInstanceOf('Album\Entity\Album', $album);
         $this->assertEquals(false, $album);
-    }
-
-
-    public function tearDown()
-    {
-        unset($this->sm);
-        unset($this->em);
-
-        parent::tearDown();
     }
 }

@@ -1,5 +1,5 @@
 {
-    "hash": "ce7c117432253c0116fd15c0cd3f0e6a",
+    "hash": "7b15b277b138b6c28ade7931977c44ea",
     "packages": [
         {
             "name": "doctrine/common",
@@ -369,16 +369,16 @@
         },
         {
             "name": "evolic/loculus",
-            "version": "v0.2.1.1",
+            "version": "v0.2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/evolic/loculus.git",
-                "reference": "v0.2.1.1"
+                "reference": "v0.2.1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/evolic/loculus/zipball/v0.2.1.1",
-                "reference": "v0.2.1.1",
+                "url": "https://api.github.com/repos/evolic/loculus/zipball/v0.2.1.3",
+                "reference": "v0.2.1.3",
                 "shasum": ""
             },
             "require": {
@@ -411,7 +411,7 @@
             "keywords": [
                 "loculus"
             ],
-            "time": "2013-03-22 21:03:10"
+            "time": "2013-03-24 17:14:59"
         },
         {
             "name": "firephp/firephp-core",
@@ -455,12 +455,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "0697ecc2e803c5b6cca9e1e11fe8718cfd22e27d"
+                "reference": "2a59134c7d6ac3f04e34b527a7de37ef0d593bbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/0697ecc2e803c5b6cca9e1e11fe8718cfd22e27d",
-                "reference": "0697ecc2e803c5b6cca9e1e11fe8718cfd22e27d",
+                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/2a59134c7d6ac3f04e34b527a7de37ef0d593bbd",
+                "reference": "2a59134c7d6ac3f04e34b527a7de37ef0d593bbd",
                 "shasum": ""
             },
             "require": {
@@ -526,7 +526,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2013-03-12 10:18:58"
+            "time": "2013-03-24 06:26:57"
         },
         {
             "name": "symfony/console",

@@ -22,13 +22,16 @@ return array(
             'Zend\Log' => function ($sm) {
                 $log = new Logger();
 
-                $firephp_writer = new FirePhp(new FirePhpBridge(\FirePHP::getInstance(true)));
-                $log->addWriter($firephp_writer);
-
-                $stream_writer = new Stream('./data/log/application.log');
+                $stream_writer = new Stream(__DIR__ . '/../../data/log/application.log');
                 $log->addWriter($stream_writer);
 
-                $log->info('FirePHP logging enabled');
+                if (php_sapi_name() != "cli") {
+                    // FirePHP caused problems with phpunit
+                    $firephp_writer = new FirePhp(new FirePhpBridge(\FirePHP::getInstance(true)));
+                    $log->addWriter($firephp_writer);
+
+                    $log->info('FirePHP logging enabled');
+                }
 
                 return $log;
             },

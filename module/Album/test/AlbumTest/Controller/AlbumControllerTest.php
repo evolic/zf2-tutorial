@@ -1,107 +1,246 @@
 <?php
-
 namespace AlbumTest\Controller;
 
-use AlbumTest\Bootstrap;
-use Album\Controller\AlbumController;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
-use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
-use PHPUnit_Framework_TestCase;
+use Zend\Http\Request as HttpRequest;
+use Zend\I18n\Translator\Translator;
+use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-class AlbumControllerTest extends PHPUnit_Framework_TestCase
+class AlbumControllerTest extends AbstractHttpControllerTestCase
 {
-    protected $controller;
-    protected $request;
-    protected $response;
-    protected $routeMatch;
-    protected $event;
+     /**
+     * Instance of Zend Translator
+     * @var Zend\I18n\Translator\Translator
+     */
+    protected $translator;
 
-    protected function setUp()
+    public function translate($text)
     {
-        $serviceManager = Bootstrap::getServiceManager();
+        if ($this->translator === null) {
+            $this->translator = $this->getApplicationServiceLocator()->get('translator');
+        }
 
-        $this->controller = new AlbumController();
-        $this->request    = new Request();
-        $this->routeMatch = new RouteMatch(array('controller' => 'index'));
-        $this->event      = new MvcEvent();
+        return $this->translator->translate($text);
+    }
 
-        $config = $serviceManager->get('Config');
-        $routerConfig = isset($config['router']) ? $config['router'] : array();
-        $router = HttpRouter::factory($routerConfig);
+    public function setUp()
+    {
+        $this->setApplicationConfig(
+            include __DIR__ . '/../../TestConfig.php'
+        );
 
-        $this->event->setRouter($router);
-        $this->event->setRouteMatch($this->routeMatch);
-        $this->controller->setEvent($this->event);
-        $this->controller->setServiceLocator($serviceManager);
+        parent::setUp();
+    }
+
+
+    public function testHomeRouteCanBeAccessed()
+    {
+        $this->dispatch('/en-US');
+
+//         $this->assertEquals('<html>', $this->getApplication()->getResponse()->getBody());
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('index');
+        $this->assertMatchedRouteName('home');
     }
 
     public function testAddActionCanBeAccessed()
     {
-        $this->routeMatch->setParam('action', 'add');
+        $this->dispatch('/en-US/album/add');
 
-        $result   = $this->controller->dispatch($this->request);
-        $response = $this->controller->getResponse();
-
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('add');
+        $this->assertMatchedRouteName('album');
     }
 
-    public function testDeleteActionCanBeAccessed()
+    public function testAddActionCannotInsertInvalidAlbum()
     {
-        $this->routeMatch->setParam('action', 'delete');
-        $this->routeMatch->setParam('id', '1');
+        $post = array(
+            'artist' => 'Led Zeppelin',
+            'title' => '',
+            'discs' => 1
+        );
+        $this->dispatch('/en-US/album/add', HttpRequest::METHOD_POST, $post);
 
-        $result   = $this->controller->dispatch($this->request);
-        $response = $this->controller->getResponse();
-
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertQueryContentContains('form ul li', "Value is required and can't be empty");
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('add');
+        $this->assertMatchedRouteName('album');
     }
 
-    public function testDeleteActionRedirect()
+    public function testAddActionCanInsertNewAlbum()
     {
-        $this->routeMatch->setParam('action', 'delete');
+        $post = array(
+            'artist' => 'Led Zeppelin',
+            'title' => 'Led Zeppelin III',
+            'discs' => 1
+        );
+        $this->dispatch('/en-US/album/add', HttpRequest::METHOD_POST, $post);
 
-        $result   = $this->controller->dispatch($this->request);
-        $response = $this->controller->getResponse();
+        $this->assertResponseStatusCode(302);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('add');
+        $this->assertMatchedRouteName('album');
+    }
 
-        $this->assertEquals(302, $response->getStatusCode());
+    public function testIndexActionCanCheckInsertedAlbum()
+    {
+        $this->dispatch('/en-US/album');
+
+        $this->assertResponseStatusCode(200);
+        $xpath = '/html/body/div[2]/table/tr[12]/td[2]/a';
+        $this->assertXpathQueryContentContains($xpath, 'Led Zeppelin III');
+
+//         $this->assertEquals('<html>', $this->getApplication()->getResponse()->getBody());
+
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('index');
+        $this->assertMatchedRouteName('album');
     }
 
     public function testEditActionCanBeAccessed()
     {
-        $this->routeMatch->setParam('action', 'edit');
-        $this->routeMatch->setParam('id', '1');//Add this Row
+        $this->dispatch('/en-US/album/edit/10');
 
-        $result   = $this->controller->dispatch($this->request);
-        $response = $this->controller->getResponse();
-
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('edit');
+        $this->assertMatchedRouteName('album');
     }
 
-    public function testEditActionRedirect()
+    public function testEditActionCannotUpdateWithInvalidData()
     {
-        $this->routeMatch->setParam('action', 'edit');
+        $post = array(
+            'artist' => 'Dido',
+            'title' => '',
+            'discs' => 1
+        );
+        $this->dispatch('/en-US/album/edit/10', HttpRequest::METHOD_POST, $post);
 
-        $result   = $this->controller->dispatch($this->request);
-        $response = $this->controller->getResponse();
+        $this->assertQueryContentContains('form ul li', "Value is required and can't be empty");
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('edit');
+        $this->assertMatchedRouteName('album');
+    }
 
-        $this->assertEquals(302, $response->getStatusCode());
+    public function testEditActionRedirectAfterUpdate()
+    {
+        $post = array(
+            'id' => 10,
+            'artist' => 'Dido',
+            'title' => 'No Angel',
+            'discs' => 1
+        );
+        $this->dispatch('/en-US/album/edit/10', HttpRequest::METHOD_POST, $post);
+
+        $this->assertResponseStatusCode(302);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('edit');
+        $this->assertMatchedRouteName('album');
+    }
+
+    public function testEditActionRedirectCauseMissingId()
+    {
+        $this->dispatch('/en-US/album/edit');
+
+        $this->assertResponseStatusCode(302);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('edit');
+        $this->assertMatchedRouteName('album');
+    }
+
+    public function testDeleteActionCanBeAccessed()
+    {
+        $this->dispatch('/en-US/album/delete/11');
+
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('delete');
+        $this->assertMatchedRouteName('album');
+    }
+
+    public function testDeleteActionRedirectAfterDelete()
+    {
+        $post = array(
+            'id' => 11,
+            'del' => $this->translate('Yes'),
+        );
+        $this->dispatch('/en-US/album/delete/11', HttpRequest::METHOD_POST, $post);
+
+        $this->assertResponseStatusCode(302);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('delete');
+        $this->assertMatchedRouteName('album');
+    }
+
+    public function testDeleteActionRedirectCauseMissingId()
+    {
+        $this->dispatch('/en-US/album/delete');
+
+        $this->assertResponseStatusCode(302);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('delete');
+        $this->assertMatchedRouteName('album');
     }
 
     public function testIndexActionCanBeAccessed()
     {
-        $this->routeMatch->setParam('action', 'index');
+        $this->dispatch('/en-US/album/index');
 
-        $result   = $this->controller->dispatch($this->request);
-        $response = $this->controller->getResponse();
-
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('index');
+        $this->assertMatchedRouteName('album');
     }
 
-    public function testGetAlbumTableReturnsAnInstanceOfAlbumTable()
+    public function testIndexActionCanBeAccessedWithOrderByTitle()
     {
-        $this->assertInstanceOf('Album\Model\AlbumTable', $this->controller->getAlbumTable());
+        $this->dispatch('/en-US/album,,title');
+
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/album');
+        $this->assertControllerClass('AlbumController');
+        $this->assertActionName('index');
+        $this->assertMatchedRouteName('album');
+    }
+
+
+    public function tearDown()
+    {
+        $sm = $this->getApplicationServiceLocator();
+        $em = $sm->get('doctrine.entitymanager.orm_default');
+        $dbh = $em->getConnection();
+        $result = $dbh->exec("UPDATE sqlite_sequence SET seq = 10 WHERE name='album';");
+
+        parent::tearDown();
     }
 }

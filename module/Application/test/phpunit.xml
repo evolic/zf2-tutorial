@@ -2,16 +2,16 @@
 
 <phpunit bootstrap="Bootstrap.php">
     <testsuites>
-        <testsuite name="Album Module test">
-            <directory>./AlbumTest</directory>
+        <testsuite name="zf2tutorial">
+            <directory>./ApplicationTest</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <directory suffix=".php">../src</directory>
-            <directory suffix=".phtml">../view</directory>
             <exclude>
+                <directory suffix=".phtml">../view</directory>
                 <directory suffix=".php">../test/</directory>
             </exclude>
         </whitelist>

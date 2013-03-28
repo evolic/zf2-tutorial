@@ -1,47 +1,92 @@
 <?php
-// module/Album/test/AlbumTest/Model/AlbumTest.php:
+
 namespace AlbumTest\Model;
 
-use Album\Model\Album;
 
+use Doctrine\ORM\EntityManager;
+use Zend\ServiceManager\ServiceManager;
+use AlbumTest\Bootstrap;
+use Album\Model\Album as AlbumModel;
 use PHPUnit_Framework_TestCase;
 
 class AlbumTest extends PHPUnit_Framework_TestCase
 {
-    public function testAlbumInitialState()
-    {
-        $album = new Album();
+    /**
+     * Service Manager
+     * @var Zend\ServiceManager\ServiceManager
+     */
+    protected $sm;
 
-        $this->assertNull($album->artist, '"artist" should initially be null');
-        $this->assertNull($album->id, '"id" should initially be null');
-        $this->assertNull($album->title, '"title" should initially be null');
+    /**
+     * Doctrine Entity Manager
+     * @var Doctrine\ORM\EntityManager
+     */
+    protected $em;
+
+    /**
+     * Album model
+     * @var Album\Model\Album
+     */
+    protected $model;
+
+    public function setUp()
+    {
+        $this->sm = Bootstrap::getServiceManager();
+        $this->em = $this->sm->get('doctrine.entitymanager.orm_default');
+        $this->model = new AlbumModel($this->em);
+
+        parent::setUp();
     }
 
-    public function testExchangeArraySetsPropertiesCorrectly()
+
+    public function testGetAlbumsCanBeAccessed()
     {
-        $album = new Album();
-        $data  = array('artist' => 'some artist',
-                       'id'     => 123,
-                       'title'  => 'some title');
-
-        $album->exchangeArray($data);
-
-        $this->assertSame($data['artist'], $album->artist, '"artist" was not set correctly');
-        $this->assertSame($data['id'], $album->id, '"title" was not set correctly');
-        $this->assertSame($data['title'], $album->title, '"title" was not set correctly');
+        $albums = $this->model->getAlbums();
+        $this->assertEquals(10, count($albums));
+        // default order by
+        $this->assertEquals('The Military Wives', $albums[0]->artist);
+        $this->assertEquals('In My Dreams', $albums[0]->title);
     }
 
-    public function testExchangeArraySetsPropertiesToNullIfKeysAreNotPresent()
+    public function testGetAlbumsByArtistCanBeAccessed()
     {
-        $album = new Album();
+        $albums = $this->model->getAlbums('artist');
+        $this->assertEquals(10, count($albums));
+        // order by artist
+        $this->assertEquals('Adele', $albums[0]->artist);
+        $this->assertEquals('21', $albums[0]->title);
+    }
 
-        $album->exchangeArray(array('artist' => 'some artist',
-                                    'id'     => 123,
-                                    'title'  => 'some title'));
-        $album->exchangeArray(array());
+    public function testGetAlbumsByAlbumTitleCanBeAccessed()
+    {
+        $albums = $this->model->getAlbums('title');
+        $this->assertEquals(10, count($albums));
+        // order by artist
+        $this->assertEquals('Adele', $albums[0]->artist);
+        $this->assertEquals('21', $albums[0]->title);
+    }
 
-        $this->assertNull($album->artist, '"artist" should have defaulted to null');
-        $this->assertNull($album->id, '"title" should have defaulted to null');
-        $this->assertNull($album->title, '"title" should have defaulted to null');
+    public function testGetAlbumCanBeAccessed()
+    {
+        $album = $this->model->getAlbum(2);
+        $this->assertInstanceOf('Album\Entity\Album', $album);
+        $this->assertEquals('Adele', $album->artist);
+        $this->assertEquals('21', $album->title);
+    }
+
+    public function testGetAlbumCannotFindWithWrongId()
+    {
+        $album = $this->model->getAlbum(100);
+        $this->assertNotInstanceOf('Album\Entity\Album', $album);
+        $this->assertEquals(false, $album);
+    }
+
+
+    public function tearDown()
+    {
+        unset($this->sm);
+        unset($this->em);
+
+        parent::tearDown();
     }
 }

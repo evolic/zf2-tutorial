@@ -1,5 +1,5 @@
 <?php
-namespace AlbumTest;
+namespace ApplicationTest;//Change this namespace for your test
 
 use Zend\Loader\AutoloaderFactory;
 use Zend\Mvc\Service\ServiceManagerConfig;
@@ -27,9 +27,9 @@ class Bootstrap
 
         $zf2ModulePaths = array();
 
-        if(isset($testConfig['module_listener_options']['module_paths'])) {
+        if (isset($testConfig['module_listener_options']['module_paths'])) {
             $modulePaths = $testConfig['module_listener_options']['module_paths'];
-            foreach($modulePaths as $modulePath) {
+            foreach ($modulePaths as $modulePath) {
                 if (($path = static::findParentPath($modulePath)) ) {
                     $zf2ModulePaths[] = $path;
                 }
@@ -71,8 +71,6 @@ class Bootstrap
     {
         return static::$config;
     }
-
-
 
     protected static function initAutoloader()
     {

@@ -100,7 +100,7 @@ class Album implements InputFilterAwareInterface
      */
     public function populate($data = array())
     {
-        $this->id     = $data['id'];
+        $this->id     = isset($data['id']) ? $data['id'] : null;
         $this->artist = $data['artist'];
         $this->title  = $data['title'];
         $this->discs  = $data['discs'];

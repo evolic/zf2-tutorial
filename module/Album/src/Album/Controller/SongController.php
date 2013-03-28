@@ -91,24 +91,29 @@ class SongController extends DefaultController
     public function editAction()
     {
         $locale = $this->params()->fromRoute('locale');
+        $album_id = (int) $this->params()->fromRoute('album_id', 0);
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->redirect()->toRoute('song', array(
+                'locale' => $locale,
                 'action' => 'add'
             ));
         }
 
-        $songModel = new SongModel($this->getEntityManager());
-        $songModel->setServiceLocator($this->getServiceLocator());
-        $song = $songModel->getSong($id);
-        if (!$song) {
+        $albumModel = new AlbumModel($this->getEntityManager());
+        $album = $albumModel->getAlbum($album_id);
+        if (!$album) {
             return $this->redirect()->toRoute('album', array('locale' => $locale));
         }
 
-        $albumModel = new AlbumModel($this->getEntityManager());
-        $album = $albumModel->getAlbum($song->album_id);
-        if (!$album) {
-            return $this->redirect()->toRoute('album', array('locale' => $locale));
+        $songModel = new SongModel($this->getEntityManager());
+        $songModel->setServiceLocator($this->getServiceLocator());
+        $song = $songModel->getSong($id, $album_id);
+        if (!$song) {
+            return $this->redirect()->toRoute('song', array(
+                'locale' => $locale,
+                'album_id' => $album_id,
+            ));
         }
 
         $form = new SongForm();
@@ -148,22 +153,29 @@ class SongController extends DefaultController
     public function deleteAction()
     {
         $locale = $this->params()->fromRoute('locale');
+        $album_id = (int) $this->params()->fromRoute('album_id', 0);
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
-            return $this->redirect()->toRoute('album');
+            return $this->redirect()->toRoute('song', array(
+                'locale' => $locale,
+                'action' => 'add'
+            ));
+        }
+
+        $albumModel = new AlbumModel($this->getEntityManager());
+        $album = $albumModel->getAlbum($album_id);
+        if (!$album) {
+            return $this->redirect()->toRoute('album', array('locale' => $locale));
         }
 
         $songModel = new SongModel($this->getEntityManager());
         $songModel->setServiceLocator($this->getServiceLocator());
-        $song = $songModel->getSong($id);
+        $song = $songModel->getSong($id, $album_id);
         if (!$song) {
-            return $this->redirect()->toRoute('album', array('locale' => $locale));
-        }
-
-        $albumModel = new AlbumModel($this->getEntityManager());
-        $album = $albumModel->getAlbum($song->album_id);
-        if (!$album) {
-            return $this->redirect()->toRoute('album', array('locale' => $locale));
+            return $this->redirect()->toRoute('song', array(
+                'locale' => $locale,
+                'album_id' => $album_id,
+            ));
         }
 
         $request = $this->getRequest();

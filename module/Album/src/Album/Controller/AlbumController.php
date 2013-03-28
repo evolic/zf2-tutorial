@@ -15,6 +15,7 @@ class AlbumController extends DefaultController
     {
         $locale = $this->params()->fromRoute('locale');
         $orderBy = $this->params()->fromRoute('order_by', '');
+
         $model = new AlbumModel($this->getEntityManager());
         $albums = $model->getAlbums($orderBy);
 
@@ -27,8 +28,6 @@ class AlbumController extends DefaultController
     public function addAction()
     {
         $locale = $this->params()->fromRoute('locale');
-        $firephp = \FirePHP::getInstance(true);
-        $firephp->info(__METHOD__);
 
         $form = new AlbumForm();
         $form->get('submit')->setValue($this->translate('Add'));

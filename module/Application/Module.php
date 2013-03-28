@@ -19,7 +19,9 @@ class Module
             $locale = $event->getRouteMatch()->getParam('locale');
 
             // unsupported locale provided
-            if (!in_array($locale, array_keys($locales)) && $_SERVER['REQUEST_URI'] !== '/') {
+            if (!in_array($locale, array_keys($locales))
+                && $event->getApplication()->getRequest()->getUri()->getPath() !== '/') {
+
                 $locale = $localesConfig['default'];
                 $url = $event->getRouter()->assemble(array(
                     'locale' => $localesConfig['default']

@@ -12,6 +12,6 @@ return array(
     'Found %d song in album.' => array(
         'Znaleziono %d utwór w albumie.',
         'Znaleziono %d utwory w albumie.',
-        'Znaleziono %d utwórów w albumie.',
+        'Znaleziono %d utworów w albumie.',
     ),
 );

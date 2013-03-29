@@ -11,7 +11,6 @@ class Module
     {
         $eventManager = $e->getApplication()->getEventManager();
         $eventManager->attach('route', function ($event) {
-            $session = $event->getApplication()->getServiceManager()->get('session');
             $sm = $event->getApplication()->getServiceManager();
             $config = $event->getApplication()->getServiceManager()->get('Configuration');
             $localesConfig = $config['locales'];
@@ -40,8 +39,6 @@ class Module
 
             $translator = $sm->get('translator');
             $translator->setLocale($locale);
-
-            $session->locale = $locale;
         }, -10);
 
         $moduleRouteListener = new ModuleRouteListener();

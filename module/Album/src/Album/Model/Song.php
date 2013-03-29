@@ -17,7 +17,7 @@ class Song extends AbstractModel
         return $songs;
     }
 
-    public function getSongsByAlbum($album_id, $orderBy, $hydrate = Query::HYDRATE_OBJECT)
+    public function getSongsByAlbum($album_id, $orderBy = '', $hydrate = Query::HYDRATE_OBJECT)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('s')
@@ -60,7 +60,12 @@ class Song extends AbstractModel
 //         $this->getServiceLocator()->get('Zend\Log')->info($qb->getDQL());
         $query = $qb->getQuery();
 //         $this->getServiceLocator()->get('Zend\Log')->info($query->getSQL());
-        $song = $query->getSingleResult($hydrate);
+        try {
+            $song = $query->getSingleResult($hydrate);
+        }
+        catch(\Exception $e) {
+            return false;
+        }
 
         return $song;
     }

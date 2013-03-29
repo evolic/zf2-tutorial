@@ -141,6 +141,44 @@ class Song implements InputFilterAwareInterface
             )));
 
             $inputFilter->add($factory->createInput(array(
+                'name'       => 'album_id',
+                'required'   => true,
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'RegEx',
+                        'options' => array(
+                            'pattern' => '/^[1-9][0-9]*$/',
+                            'messages' => array(
+                                RegexValidator::NOT_MATCH => 'Given string seems to not be a valid album id'
+                            )
+                        ),
+                    )
+                ),
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name'       => 'position',
+                'required'   => true,
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'RegEx',
+                        'options' => array(
+                            'pattern' => '/^[1-9][0-9]*$/',
+                            'messages' => array(
+                                RegexValidator::NOT_MATCH => 'Given string seems to not be a valid position'
+                            )
+                        ),
+                    )
+                ),
+            )));
+
+            $inputFilter->add($factory->createInput(array(
                 'name'     => 'name',
                 'required' => true,
                 'filters'  => array(

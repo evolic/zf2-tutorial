@@ -40,12 +40,7 @@ $this->headTitle($title);
 <?php foreach($songs as $song) : ?>
 <tr>
     <td><?php echo $this->escapeHtml($song->position);?></td>
-    <td>
-        <a href="<?php echo $this->url('song',
-            array('locale' => $this->locale, 'action'=>'index', 'album_id' => $song->id));?>">
-            <?php echo $this->escapeHtml($song->name);?>
-        </a>
-    </td>
+    <td><?php echo $this->escapeHtml($song->name);?></td>
     <td><?php echo $this->escapeHtml($song->duration->format('i:s'));?></td>
     <td><?php echo $this->escapeHtml($song->disc);?></td>
     <td>

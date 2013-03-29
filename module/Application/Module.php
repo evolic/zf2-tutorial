@@ -11,7 +11,6 @@ class Module
     {
         $eventManager = $e->getApplication()->getEventManager();
         $eventManager->attach('route', function ($event) {
-            $session = $event->getApplication()->getServiceManager()->get('session');
             $sm = $event->getApplication()->getServiceManager();
             $config = $event->getApplication()->getServiceManager()->get('Configuration');
             $localesConfig = $config['locales'];
@@ -19,7 +18,9 @@ class Module
             $locale = $event->getRouteMatch()->getParam('locale');
 
             // unsupported locale provided
-            if (!in_array($locale, array_keys($locales)) && $_SERVER['REQUEST_URI'] !== '/') {
+            if (!in_array($locale, array_keys($locales))
+                && $event->getApplication()->getRequest()->getUri()->getPath() !== '/') {
+
                 $locale = $localesConfig['default'];
                 $url = $event->getRouter()->assemble(array(
                     'locale' => $localesConfig['default']
@@ -38,9 +39,6 @@ class Module
 
             $translator = $sm->get('translator');
             $translator->setLocale($locale);
-
-            $session->locale = $locale;
-            $session->locales = $locales;
         }, -10);
 
         $moduleRouteListener = new ModuleRouteListener();

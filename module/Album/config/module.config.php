@@ -12,7 +12,7 @@ return array(
             'album' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/:locale/album/:action[/:id][,[:page],[:order_by]]',
+                    'route'    => '/:locale/album[/:action][/:id][,[:page],[:order_by]]',
                     'constraints' => array(
                         'locale' => '[a-z]{2}(-[A-Z]{2}){0,1}',
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
@@ -31,7 +31,7 @@ return array(
             'song' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/:locale/song[/:album_id]/:action[/:id][,[:page],[:order_by]]',
+                    'route'    => '/:locale/song[/:album_id][/:action][/:id][,[:page],[:order_by]]',
                     'constraints' => array(
                         'locale' => '[a-z]{2}(-[A-Z]{2}){0,1}',
                         'album_id' => '[0-9]+',

@@ -44,7 +44,12 @@ class Album extends AbstractModel
             ;
         $qb->setParameter('id', $id);
         $query = $qb->getQuery();
-        $album = $query->getSingleResult($hydrate);
+        try {
+            $album = $query->getSingleResult($hydrate);
+        }
+        catch(\Exception $e) {
+            return false;
+        }
         return $album;
     }
 }

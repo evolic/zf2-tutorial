@@ -44,6 +44,7 @@ class SongTest extends EntityTestCase
         // save data
         $this->em->persist($song);
         $this->em->flush();
+        $this->em->clear();
 
         $this->assertEquals($data['name'], $song->name);
         $this->assertEquals($data['duration'], $song->duration->format('H:i:s'));
@@ -69,7 +70,6 @@ class SongTest extends EntityTestCase
 
         $album = $this->em->getRepository('Album\Entity\Album')->find($album_id);
 
-        // @FIXME Something wrong is with this assertion
         $this->assertEquals(3, $album->songs->count());
 
         $this->assertEquals(1, $album->songs[0]->position);
@@ -122,8 +122,13 @@ class SongTest extends EntityTestCase
 
         $song = $this->em->getRepository('Album\Entity\Song')->find($id);
         $this->assertEquals(false, $song);
+    }
 
+    public function tearDown()
+    {
         $dbh = $this->em->getConnection();
         $result = $dbh->exec("UPDATE sqlite_sequence SET seq = 7 WHERE name='song';");
+
+        parent::tearDown();
     }
 }

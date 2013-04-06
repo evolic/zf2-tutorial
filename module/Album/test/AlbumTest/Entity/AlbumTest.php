@@ -70,8 +70,13 @@ class AlbumTest extends EntityTestCase
 
         $album = $this->em->getRepository('Album\Entity\Album')->find($id);
         $this->assertEquals(false, $album);
+    }
 
+    public function tearDown()
+    {
         $dbh = $this->em->getConnection();
         $result = $dbh->exec("UPDATE sqlite_sequence SET seq = 10 WHERE name='album';");
+
+        parent::tearDown();
     }
 }

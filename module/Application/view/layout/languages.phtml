@@ -1,7 +1,7 @@
 <select id="select-lang" style="margin-top:5px; width: 100px"
         onChange="javascript:window.location.replace(changeLang(this.value));">
     <?php foreach ($this->locales as $key => $value) {
-        $selected = ($key === $this->selected) ? ' selected' : '';
+        $selected = ($key === $this->selected) ? ' selected="selected"' : '';
         printf(
             '<option value="%s"%s>%s</option>',
             $this->escapeHtmlAttr($key),

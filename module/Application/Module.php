@@ -43,6 +43,21 @@ class Module
 
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        /**
+         * Log any Uncaught Errors
+         */
+        $sharedManager = $e->getApplication()->getEventManager()->getSharedManager();
+        $sm = $e->getApplication()->getServiceManager();
+        $sharedManager->attach('Zend\Mvc\Application', 'dispatch.error', function($event) use ($sm) {
+            if ($event->getParam('exception')){
+                $sm->get('Zend\Log')->crit($event->getParam('exception'));
+            }
+
+            // get view model for layout
+            $view = $event->getViewModel();
+            $view->setVariable('locale', $sm->get('translator')->getLocale());
+        });
     }
 
     public function getConfig()

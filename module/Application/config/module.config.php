@@ -132,18 +132,9 @@ return array(
                     str_replace('\\', '/', realpath(__DIR__ . '/../../Album/src/Album/Entity')) // windows
                 )
             ),
-            'Users_driver' => array(
-                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                'cache' => 'array',
-                'paths' => array(
-//                     realpath(__DIR__ . '/../../Users/src/Users/Entity')
-                    str_replace('\\', '/', realpath(__DIR__ . '/../../Album/src/Album/Entity')) // windows
-                )
-            ),
             'orm_default' => array(
                 'drivers' => array(
                     'Album\Entity' => 'Album_driver',
-                    'Users\Entity' => 'Users_driver',
                 ),
             )
         )

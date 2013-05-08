@@ -1,4 +1,5 @@
 ZF2 tutorial application
+--------------------------------
 
 About the project
 --------------------------------

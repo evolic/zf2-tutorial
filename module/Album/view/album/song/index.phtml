@@ -45,9 +45,9 @@ $this->headTitle($title);
     <td><?php echo $this->escapeHtml($song->disc);?></td>
     <td>
         <a href="<?php echo $this->url('song',
-            array('locale' => $this->locale, 'action'=>'edit', 'id' => $song->id));?>"><?php echo $this->translate('Edit'); ?></a>
+            array('locale' => $this->locale, 'action'=>'edit', 'album_id' => $album->id, 'id' => $song->id));?>"><?php echo $this->translate('Edit'); ?></a>
         <a href="<?php echo $this->url('song',
-            array('locale' => $this->locale, 'action'=>'delete', 'id' => $song->id));?>"><?php echo $this->translate('Delete'); ?></a>
+            array('locale' => $this->locale, 'action'=>'delete', 'album_id' => $album->id, 'id' => $song->id));?>"><?php echo $this->translate('Delete'); ?></a>
     </td>
 </tr>
 <?php endforeach; ?>

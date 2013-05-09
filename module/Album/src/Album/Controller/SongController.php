@@ -2,16 +2,15 @@
 
 namespace Album\Controller;
 
-use Loculus\Mvc\Controller\DefaultController,
-    Zend\View\Model\ViewModel,
-    Album\Form\SongForm,
+use Zend\View\Model\ViewModel,
     Doctrine\ORM\EntityManager,
     Doctrine\ORM\Query\Expr\Join,
-    Album\Entity\Song,
-    Album\Model\Song as SongModel,
     Album\Entity\Album,
+    Album\Entity\Song,
+    Album\Form\SongForm,
     Album\Model\Album as AlbumModel,
-    Loculus\Log;
+    Album\Model\Song as SongModel,
+    Loculus\Mvc\Controller\DefaultController;
 
 class SongController extends DefaultController
 {

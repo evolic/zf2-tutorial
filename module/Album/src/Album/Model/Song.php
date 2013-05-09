@@ -23,8 +23,7 @@ class Song extends AbstractModel
             ->select('s')
             ->from('Album\Entity\Song', 's')
             ->innerJoin('s.album', 'a')
-            ->where('s.album_id = :id')
-            ->orderBy('s.disc, s.position');
+            ->where('s.album_id = :id');
         $qb->setParameter('id', $album_id);
 
         if (isset($orderBy)) {
@@ -38,7 +37,7 @@ class Song extends AbstractModel
                 case 'position':
                 case '':
                 default:
-                    $orderColumn = 's.position';
+                    $orderColumn = 's.disc, s.position';
             }
             $qb->orderBy($orderColumn);
         }

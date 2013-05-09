@@ -13,28 +13,38 @@ $this->headTitle($title);
 <?php if ($songs): ?>
 <table class="table">
 <tr>
-    <th><a href="<?php echo $this->url('song', array(
+    <th>
+        <a href="<?php echo $this->url('song', array(
             'locale' => $this->locale,
             'action'=>'index',
             'album_id' => $album->id,
             'order_by' => 'position'
         ));?>"><?php echo $this->translate('Position'); ?></a>
     </th>
-    <th><a href="<?php echo $this->url('song', array(
+    <th>
+        <a href="<?php echo $this->url('song', array(
             'locale' => $this->locale,
             'action'=>'index',
             'album_id' => $album->id,
             'order_by' => 'name'
         ));?>"><?php echo $this->translate('Song'); ?></a>
     </th>
-    <th><a href="<?php echo $this->url('song', array(
+    <th>
+        <a href="<?php echo $this->url('song', array(
             'locale' => $this->locale,
             'action'=>'index',
             'album_id' => $album->id,
             'order_by' => 'duration'
         ));?>"><?php echo $this->translate('Duration'); ?></a>
     </th>
-    <th><?php echo $this->translate('Disc'); ?></th>
+    <th>
+        <a href="<?php echo $this->url('song', array(
+            'locale' => $this->locale,
+            'action'=>'index',
+            'album_id' => $album->id,
+            'order_by' => ''
+        ));?>"><?php echo $this->translate('Disc'); ?></a>
+    </th>
     <th>&nbsp;</th>
 </tr>
 <?php foreach($songs as $song) : ?>

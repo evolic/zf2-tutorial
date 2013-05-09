@@ -33,15 +33,16 @@ $this->headTitle($title);
     <td><?php echo $this->escapeHtml($album->artist);?></td>
     <td>
         <a href="<?php echo $this->url('song',
-            array('locale' => $this->locale, 'action'=>'index', 'album_id' => $album->id));?>">
-          <?php echo $this->escapeHtml($album->title);?>
-        </a>
+            array('locale' => $this->locale, 'action'=>'index', 'album_id' => $album->id)
+        );?>"><?php echo $this->escapeHtml($album->title);?></a>
     </td>
     <td>
         <a href="<?php echo $this->url('album',
-            array('locale' => $this->locale, 'action'=>'edit', 'id' => $album->id));?>"><?php echo $this->translate('Edit'); ?></a>
+            array('locale' => $this->locale, 'action'=>'edit', 'id' => $album->id)
+        );?>"><?php echo $this->translate('Edit'); ?></a>
         <a href="<?php echo $this->url('album',
-            array('locale' => $this->locale, 'action'=>'delete', 'id' => $album->id));?>"><?php echo $this->translate('Delete'); ?></a>
+            array('locale' => $this->locale, 'action'=>'delete', 'id' => $album->id)
+        );?>"><?php echo $this->translate('Delete'); ?></a>
     </td>
 </tr>
 <?php endforeach; ?>

@@ -3,11 +3,11 @@
 namespace Album\Controller;
 
 use Zend\View\Model\ViewModel,
-    Album\Form\AlbumForm,
-    Album\Entity\Album,
-    Album\Model\Album as AlbumModel,
     Doctrine\ORM\EntityManager,
-    Loculus\MVC\Controller\DefaultController;
+    Album\Entity\Album,
+    Album\Form\AlbumForm,
+    Album\Model\Album as AlbumModel,
+    Loculus\Mvc\Controller\DefaultController;
 
 class AlbumController extends DefaultController
 {

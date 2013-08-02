@@ -91,12 +91,6 @@ return array(
                 'base_dir' => __DIR__ . '/../language',
                 'pattern'  => '%s.mo',
             ),
-            array(
-                'type'     => 'phparray',
-                'base_dir' => __DIR__ . '/../../Album/language',
-                'pattern'  => '%s.php',
-                'text_domain' => 'album'
-            ),
         ),
     ),
     'controllers' => array(

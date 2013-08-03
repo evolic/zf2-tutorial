@@ -12,7 +12,12 @@ $this->headTitle($title);
 ); ?>
 </p>
 <?php
-$url = $this->url('song', array('locale' => $this->locale, 'action' => 'delete', 'id'=> $song->id)); ?>
+$url = $this->url('song', array(
+    'locale' => $this->locale,
+    'action' => 'delete',
+    'album_id' => $album->id,
+    'id'=> $song->id
+)); ?>
 <form action="<?php echo $url; ?>" method="post">
 <div>
   <input type="hidden" name="id" value="<?php echo (int) $album->id; ?>" />

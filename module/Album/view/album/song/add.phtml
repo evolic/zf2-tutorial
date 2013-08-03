@@ -6,10 +6,15 @@ $this->headTitle($title);
 <h2><?php echo $this->escapeHtml($title); ?></h2>
 
 <?php
+$action = $this->url('song', array(
+    'locale' => $this->locale,
+    'action' => 'add',
+    'album_id' => $album->id
+));
+
 $form = $this->form;
-$form->setAttribute('action',
-    $this->url('song', array('locale' => $this->locale, 'action' => 'add', 'album_id' => $album->id))
-);
+$form->setAttribute('action', $action);
+
 echo $this->form()->openTag($form);
 echo $this->formCollection($form);
 echo $this->form()->closeTag($form);

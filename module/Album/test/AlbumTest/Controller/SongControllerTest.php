@@ -18,7 +18,7 @@ class SongControllerTest extends HttpControllerTestCase
 
     public function testIndexActionCanBeAccessedWithNoSongs()
     {
-        $this->dispatch('/en-US/song/7');
+        $this->dispatch('/en-US/song/10');
 
         $xpath = '/html/body/div[2]/p[2]';
         $this->assertXpathQueryContentContains($xpath, $this->translate('No song was found.'));
@@ -58,7 +58,7 @@ class SongControllerTest extends HttpControllerTestCase
     {
         $this->dispatch('/en-US/song');
 
-        $this->assertResponseStatusCode(302);
+        $this->assertResponseStatusCode(400);
         $this->assertModuleName('Album');
         $this->assertControllerName('album/song');
         $this->assertControllerClass('SongController');
@@ -70,7 +70,7 @@ class SongControllerTest extends HttpControllerTestCase
     {
         $this->dispatch('/en-US/song/100');
 
-        $this->assertResponseStatusCode(302);
+        $this->assertResponseStatusCode(404);
         $this->assertModuleName('Album');
         $this->assertControllerName('album/song');
         $this->assertControllerClass('SongController');
@@ -106,7 +106,7 @@ class SongControllerTest extends HttpControllerTestCase
     {
         $this->dispatch('/en-US/song/add');
 
-        $this->assertResponseStatusCode(302);
+        $this->assertResponseStatusCode(400);
         $this->assertModuleName('Album');
         $this->assertControllerName('album/song');
         $this->assertControllerClass('SongController');
@@ -118,7 +118,7 @@ class SongControllerTest extends HttpControllerTestCase
     {
         $this->dispatch('/en-US/song/100/add');
 
-        $this->assertResponseStatusCode(302);
+        $this->assertResponseStatusCode(404);
         $this->assertModuleName('Album');
         $this->assertControllerName('album/song');
         $this->assertControllerClass('SongController');
@@ -126,7 +126,7 @@ class SongControllerTest extends HttpControllerTestCase
         $this->assertMatchedRouteName('song');
     }
 
-    public function testAddActionInsertSongWithInvalidData()
+    public function testAddActionCannotInsertSongWithMissingData()
     {
         $post = array(
             'album_id' => 6,
@@ -137,7 +137,7 @@ class SongControllerTest extends HttpControllerTestCase
         );
         $this->dispatch('/en-US/song/6/add', HttpRequest::METHOD_POST, $post);
 
-        $this->assertQueryContentContains('form ul li', "Given string seems to not be a valid position");
+        $this->assertQueryContentContains('form ul li', "Value is required and can't be empty");
 
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Album');
@@ -147,9 +147,52 @@ class SongControllerTest extends HttpControllerTestCase
         $this->assertMatchedRouteName('song');
     }
 
-    public function testAddActionInsertSongWithValidData()
+    public function testAddActionCannotInsertSongWithInvalidPositionNumber()
     {
         $post = array(
+            'album_id' => 6,
+            'position' => '0',
+            'name' => 'Swordplay',
+            'duration' => '2:01',
+            'disc' => 1
+        );
+        $this->dispatch('/en-US/song/6/add', HttpRequest::METHOD_POST, $post);
+
+        $this->assertQueryContentContains('form ul li', "Value is required and can't be empty");
+
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/song');
+        $this->assertControllerClass('SongController');
+        $this->assertActionName('add');
+        $this->assertMatchedRouteName('song');
+    }
+
+    public function testAddActionCannotInsertSongWithInvalidData()
+    {
+        $post = array(
+            'album_id' => 6,
+            'position' => 'a',
+            'name' => 'Swordplay',
+            'duration' => '2:01',
+            'disc' => 1
+        );
+        $this->dispatch('/en-US/song/6/add', HttpRequest::METHOD_POST, $post);
+
+        $this->assertQueryContentContains('form ul li', "Value is required and can't be empty");
+
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Album');
+        $this->assertControllerName('album/song');
+        $this->assertControllerClass('SongController');
+        $this->assertActionName('add');
+        $this->assertMatchedRouteName('song');
+    }
+
+    public function testAddActionCanInsertSongWithValidData()
+    {
+        $post = array(
+            'id' => '',
             'album_id' => 6,
             'position' => 3,
             'name' => 'Swordplay',
@@ -208,7 +251,7 @@ class SongControllerTest extends HttpControllerTestCase
     {
         $this->dispatch('/en-US/song/6/edit');
 
-        $this->assertResponseStatusCode(302);
+        $this->assertResponseStatusCode(400);
         $this->assertModuleName('Album');
         $this->assertControllerName('album/song');
         $this->assertControllerClass('SongController');
@@ -220,7 +263,7 @@ class SongControllerTest extends HttpControllerTestCase
     {
         $this->dispatch('/en-US/song/100/edit/100');
 
-        $this->assertResponseStatusCode(302);
+        $this->assertResponseStatusCode(404);
         $this->assertModuleName('Album');
         $this->assertControllerName('album/song');
         $this->assertControllerClass('SongController');
@@ -232,7 +275,7 @@ class SongControllerTest extends HttpControllerTestCase
     {
         $this->dispatch('/en-US/song/6/edit/100');
 
-        $this->assertResponseStatusCode(302);
+        $this->assertResponseStatusCode(404);
         $this->assertModuleName('Album');
         $this->assertControllerName('album/song');
         $this->assertControllerClass('SongController');
@@ -250,7 +293,7 @@ class SongControllerTest extends HttpControllerTestCase
             'duration' => '2:01',
             'disc' => 1
         );
-        $this->dispatch('/en-US/song/6/edit/8', HttpRequest::METHOD_POST, $post);
+        $this->dispatch('/en-US/song/6/edit/2', HttpRequest::METHOD_POST, $post);
 
         $this->assertQueryContentContains('form ul li', "Value is required and can't be empty");
         $this->assertResponseStatusCode(200);
@@ -271,7 +314,7 @@ class SongControllerTest extends HttpControllerTestCase
             'duration' => '2:01',
             'disc' => 1
         );
-        $this->dispatch('/en-US/song/6/edit/8', HttpRequest::METHOD_POST, $post);
+        $this->dispatch('/en-US/song/6/edit/2', HttpRequest::METHOD_POST, $post);
 
         $this->assertResponseStatusCode(302);
         $this->assertModuleName('Album');
@@ -293,11 +336,11 @@ class SongControllerTest extends HttpControllerTestCase
         $this->assertMatchedRouteName('song');
     }
 
-    public function testDeleteActionWithWrongNoSong()
+    public function testDeleteActionWithNoSong()
     {
         $this->dispatch('/en-US/song/6/delete');
 
-        $this->assertResponseStatusCode(302);
+        $this->assertResponseStatusCode(400);
         $this->assertModuleName('Album');
         $this->assertControllerName('album/song');
         $this->assertControllerClass('SongController');
@@ -309,7 +352,7 @@ class SongControllerTest extends HttpControllerTestCase
     {
         $this->dispatch('/en-US/song/100/delete/100');
 
-        $this->assertResponseStatusCode(302);
+        $this->assertResponseStatusCode(404);
         $this->assertModuleName('Album');
         $this->assertControllerName('album/song');
         $this->assertControllerClass('SongController');
@@ -321,7 +364,7 @@ class SongControllerTest extends HttpControllerTestCase
     {
         $this->dispatch('/en-US/song/6/delete/100');
 
-        $this->assertResponseStatusCode(302);
+        $this->assertResponseStatusCode(404);
         $this->assertModuleName('Album');
         $this->assertControllerName('album/song');
         $this->assertControllerClass('SongController');
@@ -364,7 +407,7 @@ class SongControllerTest extends HttpControllerTestCase
         $this->assertXpathQueryContentContains($xpath, 'Burning the Past');
 
         $xpath = '/html/body/div[2]/table/tr[3]/td[2]';
-        $this->assertXpathQueryContentContains($xpath, 'Crusaders');
+        $this->assertXpathQueryContentContains($xpath, 'Swordplay'); // updated in testEditActionCanUpdateWithValidData
 
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Album');
@@ -373,7 +416,6 @@ class SongControllerTest extends HttpControllerTestCase
         $this->assertActionName('index');
         $this->assertMatchedRouteName('song');
     }
-
 
     public function tearDown()
     {

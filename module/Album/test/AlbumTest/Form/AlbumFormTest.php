@@ -21,14 +21,18 @@ class AlbumFormTest extends FormTestCase
     }
 
 
-    public function testCanInsertNewRecord()
+    public function testCouldInsertNewRecordWithValidData()
     {
         $data = array(
+            'id' => '',
             'artist' => 'Led Zeppelin',
             'title' => 'Led Zeppelin III',
             'discs' => 1
         );
+
         $this->form->setData($data);
+
+        $this->assertEquals(array(), $this->form->getMessages());
         $this->assertTrue($this->form->isValid());
     }
 
@@ -46,13 +50,18 @@ class AlbumFormTest extends FormTestCase
 
     public function testCanUpdateExistingRecord()
     {
-        $album = $this->em->find('Album\Entity\Album', 8);
+        $album_id = 8;
+        $album = $this->em->find('Album\Entity\Album', $album_id);
+
         $data = array(
+            'id' => $album_id,
             'artist' => 'Jem',
             'title' => 'Finally woken',
             'discs' => 1
         );
         $this->form->setData($data);
+
+        $this->assertEquals(array(), $this->form->getMessages());
         $this->assertTrue($this->form->isValid());
     }
 

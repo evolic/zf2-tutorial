@@ -58,14 +58,23 @@ class AlbumController extends DefaultController
 
     public function editAction()
     {
+        $firephp = \FirePHP::getInstance(true);
+        $firephp->info(__METHOD__);
         $locale = $this->params()->fromRoute('locale');
         $id = (int) $this->params()->fromRoute('id');
-        if (!$id) {
-            return $this->redirect()->toRoute('album', array('action'=>'add', 'locale' => $locale));
+
+        if (!$id || !$locale) {
+            $this->getEvent()->getResponse()->setStatusCode(400);
+            return $this->viewModel;
         }
 
         $model = new AlbumModel($this->getEntityManager());
         $album = $model->getAlbum($id);
+
+        if (!$album) {
+            $this->getEvent()->getResponse()->setStatusCode(404);
+            return $this->viewModel;
+        }
 
         $form = new AlbumForm();
         $form->setBindOnValidate(false);
@@ -97,20 +106,25 @@ class AlbumController extends DefaultController
     {
         $locale = $this->params()->fromRoute('locale');
         $id = (int) $this->params()->fromRoute('id');
-        if (!$id) {
-            return $this->redirect()->toRoute('album', array('locale' => $locale));
+
+        if (!$id || !$locale) {
+            $this->getEvent()->getResponse()->setStatusCode(400);
+            return $this->viewModel;
         }
 
         $model = new AlbumModel($this->getEntityManager());
+        $album = $model->getAlbum($id);
+
+        if (!$album) {
+            $this->getEvent()->getResponse()->setStatusCode(404);
+            return $this->viewModel;
+        }
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             $del = $request->getPost('del', 'No');
             if ($del == $this->translate('Yes')) {
                 $id = (int) $request->getPost('id');
-
-                $model = new AlbumModel($this->getEntityManager());
-                $album = $model->getAlbum($id);
 
                 if ($album) {
                     $this->getEntityManager()->remove($album);

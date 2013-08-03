@@ -8,15 +8,15 @@ $this->headTitle($title);
 <h2><?php echo $this->escapeHtml($title); ?></h2>
 
 <?php
-$form = $this->form;
-$form->setAttribute('action', $this->url(
-    'song',
-    array(
-        'locale' => $this->locale,
-        'action' => 'edit',
-        'id'     => $this->id,
-    )
+$action = $this->url('song', array(
+    'locale' => $this->locale,
+    'action' => 'edit',
+    'album_id' => $this->album->id,
+    'id'     => $this->id,
 ));
+
+$form = $this->form;
+$form->setAttribute('action', $action);
 $form->prepare();
 
 echo $this->form()->openTag($form);

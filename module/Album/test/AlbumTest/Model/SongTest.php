@@ -75,9 +75,9 @@ class SongTest extends ModelTestCase
         $this->assertEquals(2, count($songs));
         // order by name
         $this->assertInstanceOf('Album\Entity\Song', $songs[0]);
-        $this->assertEquals('Crusaders', $songs[0]->name);
+        $this->assertEquals('Swordplay', $songs[0]->name);
         $this->assertInstanceOf('DateTime', $songs[0]->duration);
-        $this->assertEquals('00:01:41', $songs[0]->duration->format('H:i:s'));
+        $this->assertEquals('00:02:01', $songs[0]->duration->format('H:i:s'));
     }
 
     public function testGetSongCanBeAccessed()

@@ -20,14 +20,17 @@ class SongController extends DefaultController
         $album_id = (int) $this->params()->fromRoute('album_id', 0);
         $orderBy = $this->params()->fromRoute('order_by', '');
 
-        if (!$album_id) {
-            return $this->redirect()->toRoute('album', array('locale' => $locale));
+        if (!$album_id || !$locale) {
+            $this->getEvent()->getResponse()->setStatusCode(400);
+            return $this->viewModel;
         }
 
         $albumModel = new AlbumModel($this->getEntityManager());
         $album = $albumModel->getAlbum($album_id);
+
         if (!$album) {
-            return $this->redirect()->toRoute('album', array('locale' => $locale));
+            $this->getEvent()->getResponse()->setStatusCode(404);
+            return $this->viewModel;
         }
 
         $songModel = new SongModel($this->getEntityManager());
@@ -45,14 +48,18 @@ class SongController extends DefaultController
     {
         $locale = $this->params()->fromRoute('locale');
         $album_id = (int) $this->params()->fromRoute('album_id', 0);
-        if (!$album_id) {
-            return $this->redirect()->toRoute('album', array('locale' => $locale));
+
+        if (!$album_id || !$locale) {
+            $this->getEvent()->getResponse()->setStatusCode(400);
+            return $this->viewModel;
         }
 
         $albumModel = new AlbumModel($this->getEntityManager());
         $album = $albumModel->getAlbum($album_id);
+
         if (!$album) {
-            return $this->redirect()->toRoute('album', array('locale' => $locale));
+            $this->getEvent()->getResponse()->setStatusCode(404);
+            return $this->viewModel;
         }
 
         $form = new SongForm('song-add', $album->discs);
@@ -92,27 +99,27 @@ class SongController extends DefaultController
         $locale = $this->params()->fromRoute('locale');
         $album_id = (int) $this->params()->fromRoute('album_id', 0);
         $id = (int) $this->params()->fromRoute('id', 0);
-        if (!$id) {
-            return $this->redirect()->toRoute('song', array(
-                'locale' => $locale,
-                'action' => 'add'
-            ));
+
+        if (!$id || !$album_id || !$locale) {
+            $this->getEvent()->getResponse()->setStatusCode(400);
+            return $this->viewModel;
         }
 
         $albumModel = new AlbumModel($this->getEntityManager());
         $album = $albumModel->getAlbum($album_id);
+
         if (!$album) {
-            return $this->redirect()->toRoute('album', array('locale' => $locale));
+            $this->getEvent()->getResponse()->setStatusCode(404);
+            return $this->viewModel;
         }
 
         $songModel = new SongModel($this->getEntityManager());
         $songModel->setServiceLocator($this->getServiceLocator());
         $song = $songModel->getSong($id, $album_id);
+
         if (!$song) {
-            return $this->redirect()->toRoute('song', array(
-                'locale' => $locale,
-                'album_id' => $album_id,
-            ));
+              $this->getEvent()->getResponse()->setStatusCode(404);
+            return $this->viewModel;
         }
 
         $form = new SongForm();
@@ -154,27 +161,27 @@ class SongController extends DefaultController
         $locale = $this->params()->fromRoute('locale');
         $album_id = (int) $this->params()->fromRoute('album_id', 0);
         $id = (int) $this->params()->fromRoute('id', 0);
-        if (!$id) {
-            return $this->redirect()->toRoute('song', array(
-                'locale' => $locale,
-                'action' => 'add'
-            ));
+
+        if (!$id || !$album_id || !$locale) {
+            $this->getEvent()->getResponse()->setStatusCode(400);
+            return $this->viewModel;
         }
 
         $albumModel = new AlbumModel($this->getEntityManager());
         $album = $albumModel->getAlbum($album_id);
+
         if (!$album) {
-            return $this->redirect()->toRoute('album', array('locale' => $locale));
+            $this->getEvent()->getResponse()->setStatusCode(404);
+            return $this->viewModel;
         }
 
         $songModel = new SongModel($this->getEntityManager());
         $songModel->setServiceLocator($this->getServiceLocator());
         $song = $songModel->getSong($id, $album_id);
+
         if (!$song) {
-            return $this->redirect()->toRoute('song', array(
-                'locale' => $locale,
-                'album_id' => $album_id,
-            ));
+            $this->getEvent()->getResponse()->setStatusCode(404);
+            return $this->viewModel;
         }
 
         $request = $this->getRequest();

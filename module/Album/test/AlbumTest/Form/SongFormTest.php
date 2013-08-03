@@ -22,20 +22,27 @@ class SongFormTest extends FormTestCase
     }
 
 
-    public function testCanInsertNewRecord()
+    public function testCouldInsertNewRecordWithValidData()
     {
         $album_id = 6;
         $album = $this->em->getRepository('Album\Entity\Album')->find($album_id);
+
+        $song = new Song();
+
         $data = array(
+            'id' => '',
             'album_id' => $album_id,
             'album' => $album,
-            'id' => null,
             'position' => 3,
             'name' => 'Swordplay',
             'duration' => '00:02:01',
             'disc' => 1
         );
+
+        $this->form->setInputFilter($song->getInputFilter());
         $this->form->setData($data);
+
+        $this->assertEquals(array(), $this->form->getMessages());
         $this->assertTrue($this->form->isValid());
     }
 
@@ -43,6 +50,9 @@ class SongFormTest extends FormTestCase
     {
         $album_id = 6;
         $album = $this->em->getRepository('Album\Entity\Album')->find($album_id);
+
+        $song = new Song();
+
         $data = array(
             'album_id' => $album_id,
             'album' => $album,
@@ -52,7 +62,10 @@ class SongFormTest extends FormTestCase
             'duration' => '',
             'disc' => 1
         );
+
+        $this->form->setInputFilter($song->getInputFilter());
         $this->form->setData($data);
+
         $this->assertFalse($this->form->isValid());
         $this->assertEquals(1, count($this->form->get('duration')->getMessages()));
     }
@@ -61,6 +74,7 @@ class SongFormTest extends FormTestCase
     {
         $song_id = 6;
         $song = $this->em->getRepository('Album\Entity\Song')->find($song_id);
+
         $data = array(
             'album_id' => $song->album_id,
             'album' => $song->album,
@@ -70,7 +84,11 @@ class SongFormTest extends FormTestCase
             'duration' => '00:02:01',
             'disc' => 1
         );
+
+        $this->form->setInputFilter($song->getInputFilter());
         $this->form->setData($data);
+
+        $this->assertEquals(array(), $this->form->getMessages());
         $this->assertTrue($this->form->isValid());
     }
 

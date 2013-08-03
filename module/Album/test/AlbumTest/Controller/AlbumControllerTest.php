@@ -62,6 +62,7 @@ class AlbumControllerTest extends HttpControllerTestCase
     public function testAddActionCanInsertNewAlbum()
     {
         $post = array(
+            'id' => '',
             'artist' => 'Led Zeppelin',
             'title' => 'Led Zeppelin III',
             'discs' => 1
@@ -76,6 +77,9 @@ class AlbumControllerTest extends HttpControllerTestCase
         $this->assertMatchedRouteName('album');
     }
 
+    /**
+     * @depends testAddActionCanInsertNewAlbum
+     */
     public function testIndexActionCanCheckInsertedAlbum()
     {
         $this->dispatch('/en-US/album');
@@ -141,11 +145,11 @@ class AlbumControllerTest extends HttpControllerTestCase
         $this->assertMatchedRouteName('album');
     }
 
-    public function testEditActionRedirectCauseMissingId()
+    public function testEditActionBadRequestCausedByMissingId()
     {
         $this->dispatch('/en-US/album/edit');
 
-        $this->assertResponseStatusCode(302);
+        $this->assertResponseStatusCode(400);
         $this->assertModuleName('Album');
         $this->assertControllerName('album/album');
         $this->assertControllerClass('AlbumController');
@@ -153,6 +157,9 @@ class AlbumControllerTest extends HttpControllerTestCase
         $this->assertMatchedRouteName('album');
     }
 
+    /**
+     * @depends testAddActionCanInsertNewAlbum
+     */
     public function testDeleteActionCanBeAccessed()
     {
         $this->dispatch('/en-US/album/delete/11');
@@ -165,6 +172,9 @@ class AlbumControllerTest extends HttpControllerTestCase
         $this->assertMatchedRouteName('album');
     }
 
+    /**
+     * @depends testAddActionCanInsertNewAlbum
+     */
     public function testDeleteActionRedirectAfterDelete()
     {
         $post = array(
@@ -181,11 +191,11 @@ class AlbumControllerTest extends HttpControllerTestCase
         $this->assertMatchedRouteName('album');
     }
 
-    public function testDeleteActionRedirectCauseMissingId()
+    public function testDeleteActionBadRequestCausedByMissingId()
     {
         $this->dispatch('/en-US/album/delete');
 
-        $this->assertResponseStatusCode(302);
+        $this->assertResponseStatusCode(400);
         $this->assertModuleName('Album');
         $this->assertControllerName('album/album');
         $this->assertControllerClass('AlbumController');

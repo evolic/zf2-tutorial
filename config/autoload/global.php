@@ -15,6 +15,7 @@ use Zend\Log\Writer\FirePhp,
     Zend\Log\Writer\FirePhp\FirePhpBridge,
     Zend\Log\Writer\Stream,
     Zend\Log\Logger;
+use Loculus\Mvc\View\Http\BadRequestStrategy;
 
 return array(
     'service_manager' => array(
@@ -34,6 +35,11 @@ return array(
                 }
 
                 return $log;
+            },
+            'Loculus\Mvc\View\Http\BadRequestStrategy' => function ($sm) {
+                $strategy = new BadRequestStrategy();
+
+                return $strategy;
             },
         )
     ),

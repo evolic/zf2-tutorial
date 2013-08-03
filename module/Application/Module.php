@@ -3,7 +3,9 @@
 namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
+use Zend\Mvc\MvcEvent;
 use Zend\Http\Response;
+use Loculus\Mvc\View\Http\BadRequestStrategy;
 
 class Module
 {
@@ -58,6 +60,47 @@ class Module
             $view = $event->getViewModel();
             $view->setVariable('locale', $sm->get('translator')->getLocale());
         });
+
+        /**
+         * Setup Bad request strategy
+         */
+        $config            = $sm->get('Config');
+        $viewManagerConfig = isset($config['view_manager']) && (is_array($config['view_manager']) || $config['view_manager'] instanceof ArrayAccess)
+        ? $config['view_manager'] : array();
+
+        /**
+         * @var BadRequestStrategy
+         */
+        $badRequestStrategy   = $sm->get('Loculus\Mvc\View\Http\BadRequestStrategy');
+
+        $displayExceptions       = false;
+        $displayBadRequestReason = false;
+        $badRequestTemplate      = '400';
+
+        if (isset($viewManagerConfig['display_exceptions'])) {
+            $displayExceptions = $viewManagerConfig['display_exceptions'];
+        }
+        if (isset($viewManagerConfig['display_bad_request_reason'])) {
+            $displayBadRequestReason = $viewManagerConfig['display_bad_request_reason'];
+        }
+        if (isset($viewManagerConfig['bad_request_template'])) {
+            $badRequestTemplate = $viewManagerConfig['bad_request_template'];
+        }
+
+        $badRequestStrategy->setDisplayExceptions($displayExceptions);
+        $badRequestStrategy->setDisplayBadRequestReason($displayBadRequestReason);
+        $badRequestStrategy->setBadRequestTemplate($badRequestTemplate);
+
+        $eventManager->attach($badRequestStrategy);
+        $sharedManager->attach('Zend\Stdlib\DispatchableInterface', MvcEvent::EVENT_DISPATCH, array($badRequestStrategy, 'prepareBadRequestViewModel'), -90);
+    }
+
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+            ),
+        );
     }
 
     public function getConfig()

@@ -43,6 +43,9 @@ var defaults = {
 	startParam: 'start',
 	endParam: 'end',
 	
+	// JSON root - used e.g. in Zend Framework 2 
+	root: null,
+	
 	// time formats
 	titleFormat: {
 		month: 'MMMM yyyy',
@@ -994,6 +997,10 @@ function EventManager(options, _sources) {
 					data: data,
 					success: function(events) {
 						events = events || [];
+						if (typeof(options.root) !== 'undefined' && options.root &&
+							typeof(events[options.root]) !== 'undefined') {
+							events = events[options.root];
+						}
 						var res = applyAll(success, this, arguments);
 						if ($.isArray(res)) {
 							events = res;

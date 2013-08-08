@@ -15,7 +15,6 @@
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": ">=2.1",
-        "zendframework/zend-developer-tools":"dev-master",
         "doctrine/doctrine-module": "0.8.*@dev",
         "doctrine/doctrine-orm-module": "0.8.*@dev",
         "gedmo/doctrine-extensions": "dev-master",

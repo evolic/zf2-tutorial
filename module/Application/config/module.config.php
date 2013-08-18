@@ -77,14 +77,17 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
+            'Navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         ),
         'services' => array(
             'session' => new Zend\Session\Container('zf2tutorial'),
         ),
+        'aliases' => array(
+            'translator' => 'MvcTranslator',
+        ),
     ),
     'translator' => array(
-        'locale' => 'en-US',
+        'locale' => 'pl-PL',
         'translation_file_patterns' => array(
             array(
                 'type'     => 'gettext',
@@ -116,6 +119,7 @@ return array(
             __DIR__ . '/../view',
         ),
         'strategies' => array(
+            'ViewJsonStrategy',
             'Loculus\Mvc\View\Http\BadRequestStrategy',
         ),
     ),
@@ -131,9 +135,18 @@ return array(
                     str_replace('\\', '/', realpath(__DIR__ . '/../../Album/src/Album/Entity')) // windows
                 )
             ),
+            'EvlCalendar_driver' => array(
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => array(
+//                     realpath(__DIR__ . '/../../EvlCalendar/src/EvlCalendar/Entity'),
+                    str_replace('\\', '/', realpath(__DIR__ . '/../../EvlCalendar/src/EvlCalendar/Entity')) // windows
+                )
+            ),
             'orm_default' => array(
                 'drivers' => array(
                     'Album\Entity' => 'Album_driver',
+                    'EvlCalendar\Entity' => 'EvlCalendar_driver',
                 ),
             )
         )

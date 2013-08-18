@@ -11,16 +11,23 @@ class Module
 {
     public function onBootstrap($e)
     {
+        $firephp = \FirePHP::getInstance(true);
+        $firephp->info(__METHOD__);
+
         $eventManager = $e->getApplication()->getEventManager();
-        $eventManager->attach('route', function ($event) {
+        $eventManager->attach('route', function ($event) use ($firephp) {
+            $firephp->info('route', 'event name');
+
             $sm = $event->getApplication()->getServiceManager();
             $config = $event->getApplication()->getServiceManager()->get('Configuration');
             $localesConfig = $config['locales'];
             $locales = $localesConfig['list'];
             $locale = $event->getRouteMatch()->getParam('locale');
 
+            $firephp->info($locale, '$locale');
+
             // unsupported locale provided
-            if (!in_array($locale, array_keys($locales))
+            if ($locale && !in_array($locale, array_keys($locales))
                 && $event->getApplication()->getRequest()->getUri()->getPath() !== '/') {
 
                 $locale = $localesConfig['default'];
@@ -56,9 +63,14 @@ class Module
                 $sm->get('Zend\Log')->crit($event->getParam('exception'));
             }
 
+            $config = $event->getApplication()->getServiceManager()->get('Configuration');
+            $localesConfig = $config['locales'];
+            $locales = $localesConfig['list'];
+
             // get view model for layout
             $view = $event->getViewModel();
             $view->setVariable('locale', $sm->get('translator')->getLocale());
+            $view->setVariable('locales', $locales);
         });
 
         /**

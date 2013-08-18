@@ -1,5 +1,5 @@
 /*!
- * FullCalendar v1.6.2
+ * FullCalendar v1.6.2a
  * Docs & License: http://arshaw.com/fullcalendar/
  * (c) 2013 Adam Shaw
  */
@@ -43,7 +43,7 @@ var defaults = {
 	startParam: 'start',
 	endParam: 'end',
 	
-	// JSON root - used e.g. in Zend Framework 2 
+	// JSON root - used e.g. in Zend Framework 2
 	root: null,
 	
 	// time formats
@@ -116,7 +116,7 @@ var rtlDefaults = {
 
 ;;
 
-var fc = $.fullCalendar = { version: "1.6.2" };
+var fc = $.fullCalendar = { version: "1.6.2a" };
 var fcViews = fc.views = {};
 
 
@@ -997,6 +997,7 @@ function EventManager(options, _sources) {
 					data: data,
 					success: function(events) {
 						events = events || [];
+						// select events from the root element
 						if (typeof(options.root) !== 'undefined' && options.root &&
 							typeof(events[options.root]) !== 'undefined') {
 							events = events[options.root];

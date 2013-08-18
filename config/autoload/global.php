@@ -11,7 +11,8 @@
  * file.
  */
 
-use Zend\Log\Writer\FirePhp,
+use Zend\Cache\StorageFactory,
+    Zend\Log\Writer\FirePhp,
     Zend\Log\Writer\FirePhp\FirePhpBridge,
     Zend\Log\Writer\Stream,
     Zend\Log\Logger;
@@ -20,6 +21,23 @@ use Loculus\Mvc\View\Http\BadRequestStrategy;
 return array(
     'service_manager' => array(
         'factories' => array(
+            'Zend\Cache\Storage\Filesystem' => function($sm){
+                $cache = StorageFactory::factory(array(
+                    'adapter' => array(
+                        'name' => 'filesystem',
+                        'options' => array(
+                            'cache_dir' => __DIR__ . '/../../data/cache',
+                            'ttl' => 604800, // 7 days (a week)
+                        )
+                    ),
+                    'plugins' => array(
+                        'exception_handler' => array('throw_exceptions' => false),
+                        'serializer'
+                    )
+                ));
+
+                return $cache;
+            },
             'Zend\Log' => function ($sm) {
                 $log = new Logger();
 
@@ -43,8 +61,29 @@ return array(
             },
         )
     ),
+    'doctrine' => array(
+        'connection' => array(
+            'orm_default' => array(
+                'driverClass' => 'Doctrine\DBAL\Driver\PDOMySql\Driver',
+                'params' => array(
+                    'driverOptions' => array(
+                        'charset' => 'utf8',
+                        1002 => 'SET NAMES utf8'
+                    ),
+                    'eventSubscribers' => array(
+                        '\Gedmo\Sluggable\SluggableListener'
+                    ),
+                ),
+            )
+        ),
+        'configuration' => array(
+            'annotations' => array(
+                'Gedmo\Mapping\Annotation\'' => realpath(__DIR__ . '/../../vendor/gedemo/doctrine-extensions/lib/Gedemo/Mapping/Annotation'),
+            )
+        ),
+    ),
     'locales' => array(
-        'default' => 'en-US',
+        'default' => 'pl-PL',
         'list' => array(
             'en-US' => 'English',
             'pl-PL' => 'Polski',

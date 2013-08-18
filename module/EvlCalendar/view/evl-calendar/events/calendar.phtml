@@ -1,0 +1,261 @@
+<?php
+$basePath = $this->basePath();
+
+$idx = 100;
+$this->headLink()->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.css')
+				 ->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.print.css', 'print')
+				;
+
+$idx = 100;
+$this->headScript()->offsetSetFile(++$idx, $basePath . '/js/date.js', 'text/javascript')
+				   ->offsetSetFile(++$idx, $basePath . '/js/jquery-ui-1.10.1.custom.min.js', 'text/javascript')
+				   ->offsetSetFile(++$idx, $basePath . '/js/jquery/fullcalendar/fullcalendar.js', 'text/javascript')
+				;
+
+$title = $this->translate('Events calendar', 'evl-calendar');
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<div id='loading' style='display:none'><?php echo $this->translate('loading...'); ?></div>
+<div id='calendar'></div>
+<?php $this->headStyle()->captureStart(); ?>
+#loading {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+#calendar {
+	width: 900px;
+	margin: 15px auto 10px;
+}
+<?php $this->headStyle()->captureEnd(); ?>
+
+<?php $this->headScript()->captureStart(); ?>
+var calendar;
+
+$(document).ready(function() {
+	var format = "yyyy-MM-dd HH:mm:ss";
+	calendar = $('#calendar').fullCalendar({
+		header: {
+			left: 'prev,next today',
+			center: 'title',
+			right: 'month,agendaWeek,agendaDay'
+		},
+		editable: true,
+		selectable: true,
+		selectHelper: true,
+		root: 'events',
+		success: 'success',
+		events: "<?php echo $this->url('events_json', array(
+			'action'=>'get-events',
+		));?>",
+		timeFormat: 'H:mm', // uppercase H for 24-hour clock
+		axisFormat: 'H:mm',
+		slotMinutes: 15,
+		snapMinutes: 15,
+		defaultEventMinutes: 45,
+		// select new event on the calendar grid
+		select: function (start, end, allDay, jsEvent, view) {
+			var ts = new Date().getTime();
+			var title = prompt('Event Title:');
+			if (title) {
+				start = $.fullCalendar.formatDate(start, format);
+				end = $.fullCalendar.formatDate(end, format);
+				$.ajax({
+					url: '<?php echo $this->url('events_json', array(
+						'action'=>'add-event',
+					));?>',
+					data: {
+						title: title,
+						start: start,
+						end: end,
+						all_day: allDay,
+						ts: ts
+					},
+					type: "POST",
+					success: function(response) {
+						if (response.success) {
+							alert(response.message);
+							var events = calendar.fullCalendar('clientEvents');
+
+							for (var i in events) {
+								if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
+									events[i].id = parseInt(response.id);
+									delete events[i].ts;
+								}
+							}
+						} else {
+							alert(response.message);
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						alert('Error occured during saving event in the database');
+					}
+				});
+				calendar.fullCalendar('renderEvent', {
+					title: title,
+					start: start,
+					end: end,
+					allDay: allDay,
+					ts: ts
+				}, true // make the event "stick"
+				);
+			}
+			calendar.fullCalendar('unselect');
+		},
+		eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc) {
+			var ts = new Date().getTime();
+			alert(event.title + ' was moved ' + dayDelta + ' days\n' +
+				'(should probably update your database)');
+
+			if (!confirm("Is this okay?")) {
+				revertFunc();
+			} else {
+				$.ajax({
+					url: '<?php echo $this->url('events_json', array(
+						'action'=>'update-event',
+					));?>',
+					data: {
+						id: event.id,
+						title: event.title,
+						start: event.start.getTimestamp(),
+						end: event.end.getTimestamp(),
+						all_day: event.allDay,
+						ts: ts
+					},
+					type: "POST",
+					success: function(response) {
+						if (response.success) {
+							alert(response.message);
+							var events = calendar.fullCalendar('clientEvents');
+
+							for (var i in events) {
+								if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
+									delete events[i].ts;
+								}
+							}
+						} else {
+							alert(response.message);
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						alert('Error occured during saving event in the database');
+					}
+				});
+			}
+		},
+		eventResize: function(event, dayDelta, minuteDelta, revertFunc) {
+			var ts = new Date().getTime();
+			event.ts = ts;
+			alert(
+				"The end date of " + event.title + "has been moved " +
+				dayDelta + " days and " +
+				minuteDelta + " minutes."
+			);
+
+			if (!confirm("Is this okay?")) {
+				revertFunc();
+			} else {
+				$.ajax({
+					url: '<?php echo $this->url('events_json', array(
+						'action'=>'update-event',
+					));?>',
+					data: {
+						id: event.id,
+						title: event.title,
+						start: event.start.getTimestamp(),
+						end: event.end.getTimestamp(),
+						all_day: event.allDay,
+						ts: ts
+					},
+					type: "POST",
+					success: function(response) {
+						if (response.success) {
+							alert(response.message);
+							var events = calendar.fullCalendar('clientEvents');
+
+							for (var i in events) {
+								if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
+									console.log(events[i].id, 'Found updated event');
+									delete events[i].ts;
+								}
+							}
+						} else {
+							alert(response.message);
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						alert('Error occured during saving event in the database');
+					}
+				});
+			}
+		},
+		eventClick: function(calEvent, jsEvent, view) {
+			alert('Event: ' + calEvent.title);
+			alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+			alert('View: ' + view.name);
+		},
+		loading: function(bool) {
+			if (bool) $('#loading').show();
+			else $('#loading').hide();
+		},
+		firstDay: 1, // Monday
+		// localization
+		monthNames: [
+			'<?php echo $this->translate('January', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('February', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('March', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('April', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('May', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('June', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('July', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('August', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('September', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('October', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('November', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('December', 'evl-calendar'); ?>',
+		],
+		monthNamesShort: [
+			'<?php echo $this->translate('Jan', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Feb', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Mar', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Apr', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('May', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Jun', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Jul', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Aug', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Sep', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Oct', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Nov', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Dec', 'evl-calendar'); ?>'
+		],
+		dayNames: [
+			'<?php echo $this->translate('Sunday', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Monday', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Tuesday', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Wednesday', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Thursday', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Friday', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Saturday', 'evl-calendar'); ?>'
+		],
+		dayNamesShort: [
+			'<?php echo $this->translate('Sun', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Mon', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Tue', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Wed', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Thu', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Fri', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Sat', 'evl-calendar'); ?>'
+		],
+		buttonText: {
+			today: '<?php echo $this->translate('today', 'evl-calendar'); ?>',
+			month: '<?php echo $this->translate('month', 'evl-calendar'); ?>',
+			week: '<?php echo $this->translate('week', 'evl-calendar'); ?>',
+			day: '<?php echo $this->translate('day', 'evl-calendar'); ?>'
+		},
+		allDayText: '<?php echo $this->translate('all-day', 'evl-calendar'); ?>'
+	});
+});
+<?php $this->headScript()->captureEnd(); ?>

@@ -1,0 +1,332 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ZF2Tutorial\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-08-18 19:49+0100\n"
+"PO-Revision-Date: 2013-08-18 19:49+0100\n"
+"Last-Translator: Tomasz Kuter <evolic@interia.pl>\n"
+"Language-Team: ZF Contibutors <zf-devteam@zend.com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: translate;translatePlural\n"
+"X-Poedit-Basepath: .\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;translate\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: C:\\xampp\\projects\\zf2-fullcalendar\\module"
+"\\EvlCalendar\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/src/EvlCalendar/Controller/HolidaysController.php:66
+#, php-format
+msgid "Successfully added %d holidays for a year: %d"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/src/EvlCalendar/Controller/HolidaysController.php:71
+#, php-format
+msgid "No new holiday was created for year: %d"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/src/EvlCalendar/Controller/HolidaysController.php:115
+msgid "List of holidays"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:14
+msgid "Events calendar"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:19
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:23
+msgid "loading..."
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:136
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:64
+msgid "January"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:137
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:65
+msgid "February"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:138
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:66
+msgid "March"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:139
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:67
+msgid "April"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:140
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:154
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:68
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:82
+msgid "May"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:141
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:69
+msgid "June"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:142
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:70
+msgid "July"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:143
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:71
+msgid "August"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:144
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:72
+msgid "September"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:145
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:73
+msgid "October"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:146
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:74
+msgid "November"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:147
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:75
+msgid "December"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:150
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:78
+msgid "Jan"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:151
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:79
+msgid "Feb"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:152
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:80
+msgid "Mar"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:153
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:81
+msgid "Apr"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:155
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:83
+msgid "Jun"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:156
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:84
+msgid "Jul"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:157
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:85
+msgid "Aug"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:158
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:86
+msgid "Sep"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:159
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:87
+msgid "Oct"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:160
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:88
+msgid "Nov"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:161
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:89
+msgid "Dec"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:164
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:92
+msgid "Sunday"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:165
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:93
+msgid "Monday"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:166
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:94
+msgid "Tuesday"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:167
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:95
+msgid "Wednesday"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:168
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:96
+msgid "Thursday"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:169
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:97
+msgid "Friday"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:170
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:98
+msgid "Saturday"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:173
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:101
+msgid "Sun"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:174
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:102
+msgid "Mon"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:175
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:103
+msgid "Tue"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:176
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:104
+msgid "Wed"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:177
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:105
+msgid "Thu"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:178
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:106
+msgid "Fri"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:179
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:107
+msgid "Sat"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:182
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:110
+msgid "today"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:183
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:111
+msgid "month"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:184
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:112
+msgid "week"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:185
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:113
+msgid "day"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/events/calendar.phtml:187
+msgid "all-day"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/calendar.phtml:14
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:9
+msgid "Holidays calendar"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:2
+#, php-format
+msgid "Holidays for year %d"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:13
+msgid "Add new holiday"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:18
+#, php-format
+msgid "Add holidays for previous year: %d"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:22
+msgid "Add holidays for present year"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:26
+#, php-format
+msgid "Add holidays for next year: %d"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:34
+msgid "Name"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:38
+msgid "Dated at"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:39
+msgid "Year"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:40
+msgid "Type"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:41
+msgid "Constant"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:49
+msgid "Yes"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:49
+msgid "No"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:58
+#, php-format
+msgid "Found %d of %d holiday(s)"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:75
+msgid "No holiday was found."
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:82
+msgid "Holidays for previous year"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:86
+msgid "Holidays for present year"
+msgstr ""
+
+#: C:\xampp\projects\zf2-fullcalendar\module\EvlCalendar/view/evl-calendar/holidays/list.phtml:90
+msgid "Holidays for next year"
+msgstr ""

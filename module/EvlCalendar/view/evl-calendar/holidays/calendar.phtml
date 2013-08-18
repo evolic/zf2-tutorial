@@ -1,0 +1,117 @@
+<?php
+$basePath = $this->basePath();
+
+$idx = 100;
+$this->headLink()->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.css')
+				 ->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.print.css', 'print')
+				;
+
+$idx = 100;
+$this->headScript()->offsetSetFile(++$idx, $basePath . '/js/jquery-ui-1.10.1.custom.min.js', 'text/javascript')
+				   ->offsetSetFile(++$idx, $basePath . '/js/jquery/fullcalendar/fullcalendar.js', 'text/javascript')
+				;
+
+$title = $this->translate('Holidays calendar', 'evl-calendar');
+$this->headTitle($title);
+
+$url = $this->url('holidays_json', array(
+		'action'=>'get-events',
+));
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<div id='loading' style='display:none'><?php echo $this->translate('loading...'); ?></div>
+<div id='calendar'></div>
+<?php $this->headStyle()->captureStart(); ?>
+#loading {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+#calendar {
+	width: 900px;
+	margin: 15px auto 10px;
+}
+<?php $this->headStyle()->captureEnd(); ?>
+
+<?php $this->headScript()->captureStart(); ?>
+var locale = '<?php echo $this->locale; ?>';
+
+$(document).ready(function() {
+	var format = "yyyy-MM-dd HH:mm:ss";
+	var calendar = $('#calendar').fullCalendar({
+		header: {
+			left: 'prev,next today',
+			center: 'title',
+			right: 'month,agendaWeek,agendaDay'
+		},
+		//editable: true,
+		root: 'events',
+		success: 'success',
+		events: "<?php echo $url; ?>",
+		eventDrop: function(event, delta) {
+			alert(event.title + ' was moved ' + delta + ' days\n' +
+				'(should probably update your database)');
+		},
+		loading: function(bool) {
+			if (bool) $('#loading').show();
+			else $('#loading').hide();
+		},
+		firstDay: 1, // Monday
+		// localization
+		monthNames: [
+			'<?php echo $this->translate('January', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('February', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('March', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('April', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('May', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('June', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('July', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('August', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('September', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('October', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('November', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('December', 'evl-calendar'); ?>',
+		],
+		monthNamesShort: [
+			'<?php echo $this->translate('Jan', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Feb', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Mar', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Apr', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('May', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Jun', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Jul', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Aug', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Sep', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Oct', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Nov', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Dec', 'evl-calendar'); ?>'
+		],
+		dayNames: [
+			'<?php echo $this->translate('Sunday', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Monday', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Tuesday', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Wednesday', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Thursday', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Friday', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Saturday', 'evl-calendar'); ?>'
+		],
+		dayNamesShort: [
+			'<?php echo $this->translate('Sun', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Mon', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Tue', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Wed', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Thu', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Fri', 'evl-calendar'); ?>',
+			'<?php echo $this->translate('Sat', 'evl-calendar'); ?>'
+		],
+		buttonText: {
+			today: '<?php echo $this->translate('today', 'evl-calendar'); ?>',
+			month: '<?php echo $this->translate('month', 'evl-calendar'); ?>',
+			week: '<?php echo $this->translate('week', 'evl-calendar'); ?>',
+			day: '<?php echo $this->translate('day', 'evl-calendar'); ?>'
+		}
+	});
+});
+<?php $this->headScript()->captureEnd(); ?>

@@ -1,0 +1,90 @@
+<?php
+$title = sprintf($this->translate('Holidays for year %d'), $year);
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<p><a href="<?php echo $this->url('holidays', array(
+    'action'=>'calendar',
+));?>" class="icon calendar"><?php echo $this->translate('Holidays calendar'); ?></a><br />
+
+<a href="<?php echo $this->url('holidays', array(
+    'action'=>'add',
+));?>" class="icon add-holiday"><?php echo $this->translate('Add new holiday'); ?></a><br />
+
+<a href="<?php echo $this->url('holidays', array(
+    'action'=>'create',
+    'year' => $prev_year,
+));?>" class="icon add-holiday"><?php echo sprintf($this->translate('Add holidays for previous year: %d'), $prev_year); ?></a><br />
+<a href="<?php echo $this->url('holidays', array(
+    'action'=>'create',
+    'year' => $year,
+));?>" class="icon add-holiday"><?php echo $this->translate('Add holidays for present year'); ?></a><br />
+<a href="<?php echo $this->url('holidays', array(
+    'action'=>'create',
+    'year' => $next_year,
+));?>" class="icon add-holiday"><?php echo sprintf($this->translate('Add holidays for next year: %d'), $next_year); ?></a></p>
+
+<?php if (count($this->paginator)): ?>
+<table class="table">
+<tr>
+    <th><a href="<?php echo $this->url('holidays', array(
+            'action'=>'list',
+            'order_by' => 'name',
+        ));?>"><?php echo $this->translate('Name'); ?></a></th>
+    <th><a href="<?php echo $this->url('holidays', array(
+            'action'=>'list',
+            'order_by' => 'dated_at',
+        ));?>"><?php echo $this->translate('Dated at'); ?></a></th>
+    <th><?php echo $this->translate('Year'); ?></th>
+    <th><?php echo $this->translate('Type'); ?></th>
+    <th><?php echo $this->translate('Constant'); ?></th>
+</tr>
+<?php foreach($this->paginator as $item) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($item->name); ?></td>
+    <td><?php echo is_object($item->dated_at) ? $item->dated_at->format('Y-m-d') : ''; ?></td>
+    <td><?php echo $this->escapeHtml($item->year); ?></td>
+    <td><?php echo $this->translate($this->holidayType($item->type)); ?></td>
+    <td><?php echo ($item->constant ? $this->translate('Yes') : $this->translate('No')); ?></td>
+
+</tr>
+<?php endforeach; ?>
+</table>
+
+<p><?php
+$current = count($this->paginator->getItemsByPage($this->paginator->getCurrentPageNumber()));
+$total = $this->paginator->getTotalItemCount();
+echo sprintf($this->translate('Found %d of %d holiday(s)'), $current, $total);
+?></p>
+
+<?php
+if (ceil($this->paginator->getTotalItemCount() / $this->paginator->getItemCountPerPage()) > 1) {
+    echo $this->paginationControl($this->paginator,
+        'Sliding',
+        'partial/pagination-control',
+        array('route' => 'holiday', 'params' => array(
+            'action'=>'list',
+            'order_by' => $order_by,
+        ))
+    );
+}
+?>
+
+<?php else: ?>
+<?php echo $this->translate('No holiday was found.'); ?>
+<?php endif; ?>
+
+<p><br />
+<a href="<?php echo $this->url('holidays', array(
+    'action' => 'list',
+    'year' => $prev_year,
+));?>" class="icon holiday"><?php echo $this->translate('Holidays for previous year'); ?></a>,
+<a href="<?php echo $this->url('holidays', array(
+    'action' => 'list',
+    'year' => $year,
+));?>" class="icon holiday"><?php echo $this->translate('Holidays for present year'); ?></a>,
+<a href="<?php echo $this->url('holidays', array(
+    'action' => 'list',
+    'year' => $next_year,
+));?>" class="icon holiday"><?php echo $this->translate('Holidays for next year'); ?></a></p>

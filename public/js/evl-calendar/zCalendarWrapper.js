@@ -181,44 +181,46 @@ function zCalendarWrapper(config) {
 			report = false;
 		}
 
-		if (!skipConfirm && !confirm(translate("Is this okay?"))) {
-			revertFunc();
-		} else {
-			$.ajax({
-				url: api.update,
-				data: {
-					id: event.id,
-					title: event.title,
-					start: event.start.getTimestamp(),
-					end: event.end.getTimestamp(),
-					all_day: event.allDay,
-					ts: ts
-				},
-				type: "POST",
-				success: function( response ) {
-					if (response.success) {
-						bootbox.alert(response.message, function() {});
-						var events = calendar.fullCalendar('clientEvents');
+		bootbox.confirm(translate('Is this okay?'), translate('Cancel'), translate('OK'), function (result) {
+			if (!skipConfirm && !result) {
+				revertFunc();
+			} else {
+				$.ajax({
+					url: api.update,
+					data: {
+						id: event.id,
+						title: event.title,
+						start: event.start.getTimestamp(),
+						end: event.end.getTimestamp(),
+						all_day: event.allDay,
+						ts: ts
+					},
+					type: "POST",
+					success: function( response ) {
+						if (response.success) {
+							bootbox.alert(response.message, function() {});
+							var events = calendar.fullCalendar('clientEvents');
 
-						for (var i in events) {
-							if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
-								delete events[i].ts;
+							for (var i in events) {
+								if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
+									delete events[i].ts;
 
-								if (report) {
-									// Reports changes to an event and renders them on the calendar
-									calendar.fullCalendar('updateEvent', events[i]);
+									if (report) {
+										// Reports changes to an event and renders them on the calendar
+										calendar.fullCalendar('updateEvent', events[i]);
+									}
 								}
 							}
+						} else {
+							bootbox.alert(response.message, function() {});
 						}
-					} else {
-						bootbox.alert(response.message, function() {});
+					},
+					error: function( jqXHR, textStatus, errorThrown ) {
+						bootbox.alert('Error occured during saving event in the database', function() {});
 					}
-				},
-				error: function( jqXHR, textStatus, errorThrown ) {
-					bootbox.alert('Error occured during saving event in the database', function() {});
-				}
-			});
-		}
+				});
+			}
+		});
 	}
 
 	/**

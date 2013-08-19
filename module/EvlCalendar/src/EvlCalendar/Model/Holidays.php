@@ -4,7 +4,7 @@ namespace EvlCalendar\Model;
 
 use Doctrine\ORM\Query,
     Doctrine\ORM\Query\Expr\Join;
-use Settings\Entity\Holiday as HolidayEntity;
+use EvlCalendar\Entity\Holiday as HolidayEntity;
 use Loculus\Model\AbstractModel;
 
 class Holidays extends AbstractModel

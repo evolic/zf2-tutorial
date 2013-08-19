@@ -1,8 +1,31 @@
+/* ===================================================
+ * zCalendarWrapper.js v0.2.0
+ * https://github.com/evolic/zf2-tutorial/blob/calendar/public/js/evl-calendar/zCalendarWrapper.js
+ * ===================================================
+ * Copyright 2013 Tomasz Kuter
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================== */
+
 /**
  * jQuery Fullcalendar wrapper class
  * 
+ * Class based on the JavaScript OOP example available at:
+ * http://phrogz.net/JS/classes/OOPinJS.html
+ * 
  * @author Tomasz Kuter <evolic_at_interia_dot_pl>
- * @param config
+ * @version v0.2.0
+ * @param {Array} config
  */
 
 function zCalendarWrapper(config) {
@@ -15,6 +38,7 @@ function zCalendarWrapper(config) {
 
 	/**
 	 * jQuery FullCalendar container e.g. '#calendar'
+	 * @private
 	 */
 	var container = config.container;
 	delete config.container;
@@ -26,8 +50,9 @@ function zCalendarWrapper(config) {
 	 *   get: '/events/get',
 	 *   add: '/events/add',
 	 *   update: '/events/update',
-	 *   delete: '/events/delete'
+	 *   erase: '/events/delete'
 	 * }
+	 * @private
 	 */
 	var api = config.api;
 	delete config.api;
@@ -35,6 +60,9 @@ function zCalendarWrapper(config) {
 	var locales = config.locales;
 	delete config.locales;
 
+	/**
+	 * @private
+	 */
 	var defaults = {
 		header: {
 			left: 'prev,next today',
@@ -71,20 +99,33 @@ function zCalendarWrapper(config) {
 		}
 	};
 
+	/**
+	 * @private
+	 */
 	var cfg = defaults;
 	$.extend(true, cfg, config);
 
+	/**
+	 * @private
+	 */
 	var format = "yyyy-MM-dd HH:mm:ss";
+	/**
+	 * jQuery FullCalendar instance
+	 * @private
+	 */
 	var calendar = $(container).fullCalendar(cfg);
 
+	/**
+	 * @private
+	 */
 	function createEvent( startDate, endDate, allDay, jsEvent, view ) {
 		var ts = new Date().getTime();
-		
-		bootbox.prompt(translate('Event Title:'), function(title) {
+
+		bootbox.prompt(translate('Event Title:'), translate('Cancel'), translate('OK'), function(title) {
 			if (title) {
 				startDate = $.fullCalendar.formatDate(startDate, format);
 				endDate = $.fullCalendar.formatDate(endDate, format);
-	
+
 				$.ajax({
 					url: api.add,
 					data: {
@@ -99,7 +140,7 @@ function zCalendarWrapper(config) {
 						if (response.success) {
 							bootbox.alert(response.message, function() {});
 							var events = calendar.fullCalendar('clientEvents');
-	
+
 							for (var i in events) {
 								if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
 									events[i].id = parseInt(response.id);
@@ -126,10 +167,21 @@ function zCalendarWrapper(config) {
 		calendar.fullCalendar('unselect');
 	}
 
-	function updateEvent( event, revertFunc ) {
+	/**
+	 * @private
+	 */
+	function updateEvent( event, revertFunc, skipConfirm, report ) {
 		var ts = new Date().getTime();
+		event.ts = ts;
 
-		if (!confirm(translate("Is this okay?"))) {
+		if (typeof(skipConfirm) === 'undefined') {
+			skipConfirm = false;
+		}
+		if (typeof(report) === 'undefined') {
+			report = false;
+		}
+
+		if (!skipConfirm && !confirm(translate("Is this okay?"))) {
 			revertFunc();
 		} else {
 			$.ajax({
@@ -151,6 +203,11 @@ function zCalendarWrapper(config) {
 						for (var i in events) {
 							if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
 								delete events[i].ts;
+
+								if (report) {
+									// Reports changes to an event and renders them on the calendar
+									calendar.fullCalendar('updateEvent', events[i]);
+								}
 							}
 						}
 					} else {
@@ -164,18 +221,82 @@ function zCalendarWrapper(config) {
 		}
 	}
 
+	/**
+	 * @param {Array} event
+	 * @private
+	 */
 	function deleteEvent ( event ) {
-		
+		var ts = new Date().getTime();
+		event.ts = ts;
+
+		$.ajax({
+			url: api.erase,
+			data: {
+				id: event.id,
+				ts: ts
+			},
+			type: "POST",
+			success: function( response ) {
+				if (response.success) {
+					bootbox.alert(response.message, function() {});
+					var events = calendar.fullCalendar('clientEvents');
+
+					for (var i in events) {
+						if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
+							delete events[i].ts;
+							calendar.fullCalendar("removeEvents", events[i]._id);
+						}
+					}
+				} else {
+					bootbox.alert(response.message, function() {});
+				}
+			},
+			error: function( jqXHR, textStatus, errorThrown ) {
+				bootbox.alert('Error occured during deleting event in the database', function() {});
+			}
+		});
 	}
 
+	/**
+	 * @param {Array} event
+	 * @private
+	 */
 	function editEvent ( event ) {
-		
+		bootbox.prompt(translate('Event Title:'), translate('Cancel'), translate('OK'), function(title) {
+			if (title) {
+				event.title = title;
+				updateEvent( event, function () {}, true, true );
+			}
+		}, event.title);
 	}
 
+	/**
+	 * @param {Array} event
+	 * @private
+	 */
 	function clickEvent ( event ) {
-		
+		bootbox.dialog(translate('What do you want to do with event `%s`?').replace('%s', event.title), [{
+			"label" : translate('Delete'),
+			"class" : "btn-danger",
+			"callback": function() {
+				console.log("uh oh, look out!");
+				deleteEvent ( event );
+			}
+		}, {
+			"label" : translate('Edit'),
+			"class" : "btn-primary",
+			"callback": function() {
+				console.log("Primary button");
+				editEvent ( event );
+			}
+		}, {
+			"label" : translate('Cancel')
+		}]);
 	}
 
+	/**
+	 * @private
+	 */
 	function translate(text) {
 		if (typeof(locales[text]) !== 'undefined') {
 			return locales[text];
@@ -190,6 +311,9 @@ function zCalendarWrapper(config) {
 	// MAY NOT BE CHANGED; MAY BE REPLACED WITH PUBLIC FLAVORS 
 	// ************************************************************************ 
 
+	/**
+	 * @public
+	 */
 	this.getCalendar = function () {
 		return calendar;
 	}

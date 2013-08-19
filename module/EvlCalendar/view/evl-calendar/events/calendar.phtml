@@ -3,8 +3,8 @@ $basePath = $this->basePath();
 
 $idx = 100;
 $this->headLink()->offsetSetStylesheet(++$idx, $basePath . '/css/bootstrap.min.css')
-                 ->offsetSetStylesheet(++$idx, $basePath . '/css/bootstrap-responsive.min.css')
-                 ->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.css')
+				 ->offsetSetStylesheet(++$idx, $basePath . '/css/bootstrap-responsive.min.css')
+				 ->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.css')
 				 ->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.print.css', 'print')
 				;
 
@@ -54,13 +54,17 @@ $(document).ready(function() {
 			update: '<?php echo $this->url('events_json', array(
 				'action'=>'update-event',
 			));?>',
-			delete: '<?php echo $this->url('events_json', array(
+			erase: '<?php echo $this->url('events_json', array(
 				'action'=>'delete-event',
 			));?>'
 		},
 		locales: {
-		    'Event Title:': '<?php echo $this->translate('Event Title:', 'evl-calendar'); ?>',
-		    'Is this okay?': '<?php echo $this->translate('Is this okay?', 'evl-calendar'); ?>'
+			'Event Title:': '<?php echo $this->translate('Event Title:', 'evl-calendar'); ?>',
+			'Is this okay?': '<?php echo $this->translate('Is this okay?', 'evl-calendar'); ?>',
+			'What do you want to do with event `%s`?': '<?php echo $this->translate('What do you want to do with event `%s`?', 'evl-calendar'); ?>',
+			'Delete': '<?php echo $this->translate('Delete', 'evl-calendar'); ?>',
+			'Edit': '<?php echo $this->translate('Edit', 'evl-calendar'); ?>',
+			'Cancel': '<?php echo $this->translate('Cancel', 'evl-calendar'); ?>'
 		},
 		// localization
 		monthNames: [

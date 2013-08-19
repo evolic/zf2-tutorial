@@ -20,10 +20,6 @@ class EventsController extends DefaultController
 {
     const DEFAULT_ITEMS_PER_PAGE = 20;
 
-    public function addAction()
-    {
-    }
-
     public function calendarAction()
     {
         return $this->viewModel;
@@ -56,6 +52,7 @@ class EventsController extends DefaultController
 
         if (!$ts) {
             $this->getEvent()->getResponse()->setStatusCode(400);
+
             return new JsonModel(array(
                 'message' => $message,
                 'success' => false,
@@ -77,9 +74,11 @@ class EventsController extends DefaultController
                 $this->getEntityManager()->persist($event);
                 $this->getEntityManager()->flush();
 
-                $success = true;
-                $id      = (int) $event->id;
-                $message = sprintf($this->translate('Added new event `%s`'), $event->name);
+                $success   = true;
+                $id        = (int) $event->id;
+                // translate helper
+                $translate = $this->getServiceLocator()->get('viewhelpermanager')->get('translate');
+                $message   = sprintf($translate('Added new event `%s`', 'evl-calendar'), $event->name);
             } else {
                 $message = 'Invalid data';
             }
@@ -95,9 +94,10 @@ class EventsController extends DefaultController
         ));
     }
 
-
     public function updateEventAction()
     {
+        $firephp = \FirePHP::getInstance(true);
+        $firephp->info(__METHOD__);
         $success = false;
         $message = 'Bad request';
         $ts      = $this->params()->fromPost('ts', 0);
@@ -105,6 +105,7 @@ class EventsController extends DefaultController
 
         if (!$id || !$ts) {
             $this->getEvent()->getResponse()->setStatusCode(400);
+
             return new JsonModel(array(
                 'message' => $message,
                 'success' => false,
@@ -119,6 +120,7 @@ class EventsController extends DefaultController
         if (!$event) {
             $message = 'Not found';
             $this->getEvent()->getResponse()->setStatusCode(404);
+
             return new JsonModel(array(
                 'message' => $message,
                 'success' => false,
@@ -137,10 +139,12 @@ class EventsController extends DefaultController
                 $form->bindValues();
                 $this->getEntityManager()->flush();
 
-                $success = true;
-                $message = sprintf($this->translate('Updated event `%s`'), $event->name);
+                $success   = true;
+                // translate helper
+                $translate = $this->getServiceLocator()->get('viewhelpermanager')->get('translate');
+                $message   = sprintf($translate('Updated event `%s`', 'evl-calendar'), $event->name);
             } else {
-                $message = 'Invalid data';
+                $message   = 'Invalid data';
             }
         } else {
             $this->getEvent()->getResponse()->setStatusCode(400);
@@ -151,6 +155,57 @@ class EventsController extends DefaultController
             'success' => $success,
             'ts'      => $ts,
             'id'      => $id,
+        ));
+    }
+
+
+    public function deleteEventAction()
+    {
+        $success = false;
+        $message = 'Bad request';
+        $ts      = $this->params()->fromPost('ts', 0);
+        $id      = (int) $this->params()->fromPost('id', 0);
+
+        if (!$id || !$ts) {
+            $this->getEvent()->getResponse()->setStatusCode(400);
+
+            return new JsonModel(array(
+                'message' => $message,
+                'success' => false,
+            ));
+        }
+
+        $request = $this->getRequest();
+
+        $model = new EventsModel($this->getEntityManager(), $this->getCacheAdapter());
+        $event = $model->getEvent($id);
+
+        if (!$event) {
+            $message = 'Not found';
+            $this->getEvent()->getResponse()->setStatusCode(404);
+
+            return new JsonModel(array(
+                'message' => $message,
+                'success' => false,
+            ));
+        }
+
+        if ($request->isPost()) {
+            $this->getEntityManager()->remove($event);
+            $this->getEntityManager()->flush();
+
+            $success   = true;
+            // translate helper
+            $translate = $this->getServiceLocator()->get('viewhelpermanager')->get('translate');
+            $message   = sprintf($translate('Deleted event `%s`', 'evl-calendar'), $event->name);
+        } else {
+            $this->getEvent()->getResponse()->setStatusCode(400);
+        }
+
+        return new JsonModel(array(
+            'message' => $message,
+            'success' => $success,
+            'ts'      => $ts,
         ));
     }
 }

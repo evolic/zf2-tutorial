@@ -40,17 +40,17 @@ In project I used modified jQuery FullCalendar, version 1.6.2 to enable support 
 
     Included script creates **log file**, which should be very helpful when you encounter some issues
     with the most recent version of some libraries.
-    Thanks to *the log file* you will be able to return to the last good working environment.
+    Thanks to **the log file** you will be able to return to **the last good working environment**.
 
 2.  Creating database structure
 
     This application has two modules, which use database:
 
 *   Album
-    SQL file can be found at *module/Album/data/album.sql*
+    SQL file can be found at **module/Album/data/album.sql**
 
 *   EvlCalendar
-    SQL file can be found at *module/EvlCalendar/data/calendar.sql*
+    SQL file can be found at **module/EvlCalendar/data/calendar.sql**
 
     SQL files contain also some sample records.
 

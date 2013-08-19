@@ -56,11 +56,11 @@ In project I used modified jQuery FullCalendar, version 1.6.2 to enable support 
 
 
 
-### TODO ###
+### TODO list ###
 
-*   Integrate with Twitter Bootstrap framework
-*   Add edit/delete event actions
-*   Add working with events, which belongs to different calendars/domain
+*   ~~Integrate with Twitter Bootstrap framework~~
+*   ~~Add edit/delete event actions~~
+*  Add working with events, which belongs to different calendars/domain
 
 
 ### More info ###

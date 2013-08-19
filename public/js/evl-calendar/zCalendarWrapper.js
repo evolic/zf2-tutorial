@@ -79,49 +79,50 @@ function zCalendarWrapper(config) {
 
 	function createEvent( startDate, endDate, allDay, jsEvent, view ) {
 		var ts = new Date().getTime();
-		var title = prompt(translate('Event Title:'));
-
-		if (title) {
-			startDate = $.fullCalendar.formatDate(startDate, format);
-			endDate = $.fullCalendar.formatDate(endDate, format);
-
-			$.ajax({
-				url: api.add,
-				data: {
+		
+		bootbox.prompt(translate('Event Title:'), function(title) {
+			if (title) {
+				startDate = $.fullCalendar.formatDate(startDate, format);
+				endDate = $.fullCalendar.formatDate(endDate, format);
+	
+				$.ajax({
+					url: api.add,
+					data: {
+						title: title,
+						start: startDate,
+						end: endDate,
+						all_day: allDay,
+						ts: ts
+					},
+					type: "POST",
+					success: function( response ) {
+						if (response.success) {
+							bootbox.alert(response.message, function() {});
+							var events = calendar.fullCalendar('clientEvents');
+	
+							for (var i in events) {
+								if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
+									events[i].id = parseInt(response.id);
+									delete events[i].ts;
+								}
+							}
+						} else {
+							bootbox.alert(response.message, function() {});
+						}
+					},
+					error: function( jqXHR, textStatus, errorThrown ) {
+						bootbox.alert('Error occured during saving event in the database', function() {});
+					}
+				});
+				calendar.fullCalendar('renderEvent', {
 					title: title,
 					start: startDate,
 					end: endDate,
-					all_day: allDay,
+					allDay: allDay,
 					ts: ts
-				},
-				type: "POST",
-				success: function( response ) {
-					if (response.success) {
-						bootbox.alert(response.message, function() {});
-						var events = calendar.fullCalendar('clientEvents');
-
-						for (var i in events) {
-							if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
-								events[i].id = parseInt(response.id);
-								delete events[i].ts;
-							}
-						}
-					} else {
-						bootbox.alert(response.message, function() {});
-					}
-				},
-				error: function( jqXHR, textStatus, errorThrown ) {
-					bootbox.alert('Error occured during saving event in the database', function() {});
-				}
-			});
-			calendar.fullCalendar('renderEvent', {
-				title: title,
-				start: startDate,
-				end: endDate,
-				allDay: allDay,
-				ts: ts
-			}, true); // make the event "stick"
-		}
+				}, true); // make the event "stick"
+			}
+		});
 		calendar.fullCalendar('unselect');
 	}
 

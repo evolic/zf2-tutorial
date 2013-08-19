@@ -46,11 +46,11 @@ In project I used modified jQuery FullCalendar, version 1.6.2 to enable support 
 
     This application has two modules, which use database:
 
-    *   Album
-        SQL file can be found at *module/Album/data/album.sql*
+*   Album
+    SQL file can be found at *module/Album/data/album.sql*
 
-    *   EvlCalendar
-        SQL file can be found at *module/EvlCalendar/data/calendar.sql*
+*   EvlCalendar
+    SQL file can be found at *module/EvlCalendar/data/calendar.sql*
 
     SQL files contain also some sample records.
 

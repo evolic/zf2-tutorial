@@ -55,6 +55,14 @@ In project I used modified jQuery FullCalendar, version 1.6.2 to enable support 
     SQL files contain also some sample records.
 
 
+
+### TODO ###
+
+*   Integrate with Twitter Bootstrap framework
+*   Add edit/delete event actions
+*   Add working with events, which belongs to different calendars/domain
+
+
 ### More info ###
 
 See [http://akrabat.com/zend-framework-2-tutorial/](http://akrabat.com/zend-framework-2-tutorial/)

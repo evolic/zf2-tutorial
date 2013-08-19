@@ -79,7 +79,7 @@ class EventsController extends DefaultController
 
                 $success = true;
                 $id      = (int) $event->id;
-                $message = sprintf('Added new event `%s`', $event->name);
+                $message = sprintf($this->translate('Added new event `%s`'), $event->name);
             } else {
                 $message = 'Invalid data';
             }
@@ -138,7 +138,7 @@ class EventsController extends DefaultController
                 $this->getEntityManager()->flush();
 
                 $success = true;
-                $message = sprintf('Updated event `%s`', $event->name);
+                $message = sprintf($this->translate('Updated event `%s`'), $event->name);
             } else {
                 $message = 'Invalid data';
             }

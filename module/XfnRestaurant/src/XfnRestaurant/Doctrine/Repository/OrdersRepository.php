@@ -20,9 +20,6 @@ class OrdersRepository extends EntityRepository
      */
     public function getOrders($criteria, $hydrate = Query::HYDRATE_OBJECT)
     {
-        $firephp = \FirePHP::getInstance();
-        $firephp->info(__METHOD__);
-
         $qb = $this->_em->createQueryBuilder();
         $qb->select('o')
             ->from('XfnRestaurant\Entity\Order', 'o');
@@ -35,9 +32,6 @@ class OrdersRepository extends EntityRepository
         if (isset($criteria['limit']) && $criteria['limit']) {
             $qb->setMaxResults($criteria['limit']);
         }
-
-        $firephp->info($qb->getQuery()->getDQL(), 'dql');
-        $firephp->info($qb->getQuery()->getSQL(), 'sql');
 
         return $qb->getQuery()->getResult($hydrate);
     }

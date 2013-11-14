@@ -33,7 +33,5 @@ class Module
 
     public function onBootstrap($e)
     {
-        $firephp = \FirePHP::getInstance(true);
-        $firephp->info(__METHOD__);
     }
 }

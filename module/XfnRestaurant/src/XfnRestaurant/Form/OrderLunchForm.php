@@ -79,9 +79,6 @@ class OrderLunchForm extends Form implements InputFilterProviderInterface, Servi
      */
     public function getInputFilterSpecification()
     {
-        $firephp = \FirePHP::getInstance();
-        $firephp->info(__METHOD__);
-
         return array(
             'main-course' => array(
                 'required' => true,

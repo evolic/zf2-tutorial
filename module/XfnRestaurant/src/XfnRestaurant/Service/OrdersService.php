@@ -31,9 +31,6 @@ class OrdersService
      */
     public function createNewDrinkOrder($params)
     {
-        $firephp = \FirePHP::getInstance();
-        $firephp->info(__METHOD__);
-
         $params['ice-cubes'] = !($params['ice-cubes'] === 'no');
         $params['lemon']     = !($params['lemon'] === 'no');
 
@@ -51,8 +48,6 @@ class OrdersService
             $this->getEntityManager()->persist($order);
             $this->getEntityManager()->flush();
 
-            $firephp->info($order->id, 'order_id');
-
             // link order with a drink
             $drink2order = new Drink2Order();
             $drink2order->drink = $drink;
@@ -67,12 +62,8 @@ class OrdersService
             $this->getEntityManager()->flush();
             $this->getEntityManager()->commit();
 
-            $firephp->info('OK');
-
             return true;
         } catch (\Exception $e) {
-            $firephp->error($e->getMessage());
-
             $this->getEntityManager()->rollback();
             $this->getEntityManager()->close();
         }
@@ -87,9 +78,6 @@ class OrdersService
      */
     public function createNewLunchOrder($params)
     {
-        $firephp = \FirePHP::getInstance();
-        $firephp->info(__METHOD__);
-
         $main_course = $this->getMealsRepository()->find($params['main-course']);
         $dessert     = $this->getDessertsRepository()->find($params['dessert']);
 
@@ -104,8 +92,6 @@ class OrdersService
             $order->price = $main_course->price + $dessert->price;
             $this->getEntityManager()->persist($order);
             $this->getEntityManager()->flush();
-
-            $firephp->info($order->id, 'order_id');
 
             // link order with a drink
             $lunch = new Lunch();
@@ -122,12 +108,8 @@ class OrdersService
             $this->getEntityManager()->flush();
             $this->getEntityManager()->commit();
 
-            $firephp->info('OK');
-
             return true;
         } catch (\Exception $e) {
-            $firephp->error($e->getMessage());
-
             $this->getEntityManager()->rollback();
             $this->getEntityManager()->close();
         }

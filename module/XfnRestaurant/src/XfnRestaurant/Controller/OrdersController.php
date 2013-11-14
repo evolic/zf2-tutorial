@@ -66,8 +66,6 @@ class OrdersController extends DefaultController
 
     public function detailsAction()
     {
-        $firephp = \FirePHP::getInstance(true);
-        $firephp->info(__METHOD__);
         $locale = $this->params()->fromRoute('locale');
         $id = (int) $this->params()->fromRoute('id');
 
@@ -93,8 +91,6 @@ class OrdersController extends DefaultController
 
     public function makeAction()
     {
-        $firephp = \FirePHP::getInstance(true);
-        $firephp->info(__METHOD__);
         $locale = $this->params()->fromRoute('locale');
 
         if (!$locale) {
@@ -132,7 +128,6 @@ class OrdersController extends DefaultController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $values = $form->getData();
-                $firephp->info($values, 'form values');
 
                 switch ($values['type']) {
                     case Order::TYPE_LUNCH:
@@ -140,8 +135,6 @@ class OrdersController extends DefaultController
                     case Order::TYPE_DRINK:
                         return $this->redirect()->toRoute('restaurant/orders/order-drink', array('locale' => $locale));
                 }
-            } else {
-                $firephp->warn($form->getMessages(), 'error messages');
             }
         }
 
@@ -154,8 +147,6 @@ class OrdersController extends DefaultController
 
     public function orderDrinkAction()
     {
-        $firephp = \FirePHP::getInstance(true);
-        $firephp->info(__METHOD__);
         $locale = $this->params()->fromRoute('locale');
 
         if (!$locale) {
@@ -170,10 +161,7 @@ class OrdersController extends DefaultController
         // loop through all validators of the validator chained currently attached to the element
         foreach ($form->getInputFilter()->get('drink')->getValidatorChain()->getValidators() as $validator) {
             $instance = $validator['instance'];
-            $firephp->info($validator, 'validator');
-            $firephp->info(get_class($instance), 'validator');
             if ($instance instanceof InArray) {
-                $firephp->info('$instance is instanceof InArray');
                 $instance->setMessages(array(
                     InArray::NOT_IN_ARRAY => 'Please choose a drink',
                 ));
@@ -189,7 +177,6 @@ class OrdersController extends DefaultController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $values = $form->getData();
-                $firephp->info($values, 'form values');
 
                 if ($this->getOrdersService()->createNewDrinkOrder($values)) {
                     $this->flashMessenger()->addSuccessMessage("New order for a drink has been successfully added.");
@@ -199,10 +186,6 @@ class OrdersController extends DefaultController
 
                 // Redirect to list of orders
                 return $this->redirect()->toRoute('restaurant/orders', array('locale' => $locale));
-            } else {
-                $values = $form->getData();
-                $firephp->info($values, 'form values');
-                $firephp->warn($form->getMessages(), 'error messages');
             }
         }
 
@@ -215,8 +198,6 @@ class OrdersController extends DefaultController
 
     public function orderLunchAction()
     {
-        $firephp = \FirePHP::getInstance(true);
-        $firephp->info(__METHOD__);
         $locale = $this->params()->fromRoute('locale');
 
         if (!$locale) {
@@ -237,10 +218,7 @@ class OrdersController extends DefaultController
             // loop through all validators of the validator chained currently attached to the element
             foreach ($form->getInputFilter()->get($select)->getValidatorChain()->getValidators() as $validator) {
                 $instance = $validator['instance'];
-                $firephp->info($validator, 'validator');
-                $firephp->info(get_class($instance), 'validator');
                 if ($instance instanceof InArray) {
-                    $firephp->info('$instance is instanceof InArray');
                     $instance->setMessages(array(
                         InArray::NOT_IN_ARRAY => $message,
                     ));
@@ -257,7 +235,6 @@ class OrdersController extends DefaultController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $values = $form->getData();
-                $firephp->info($values, 'form values');
 
                 if ($this->getOrdersService()->createNewLunchOrder($values)) {
                     $this->flashMessenger()->addSuccessMessage("New order for a lunch has been successfully added.");
@@ -267,10 +244,6 @@ class OrdersController extends DefaultController
 
                 // Redirect to list of orders
                 return $this->redirect()->toRoute('restaurant/orders', array('locale' => $locale));
-            } else {
-                $values = $form->getData();
-                $firephp->info($values, 'form values');
-                $firephp->warn($form->getMessages(), 'error messages');
             }
         }
 

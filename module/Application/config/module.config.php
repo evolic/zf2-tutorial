@@ -21,7 +21,7 @@ return array(
                         'locale' => '[a-z]{2}(-[A-Z]{2}){0,1}'
                     ),
                     'defaults' => array(
-                        'controller' => 'album/album',
+                        'controller' => 'xfn-restaurant/orders',
                         'action'     => 'index'
                     ),
                 ),
@@ -135,14 +135,6 @@ return array(
             ),
         ),
         'driver' => array(
-            'Album_driver' => array(
-                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                'cache' => 'array',
-                'paths' => array(
-//                     realpath(__DIR__ . '/../../Album/src/Album/Entity'),
-                    str_replace('\\', '/', realpath(__DIR__ . '/../../Album/src/Album/Entity')) // windows
-                )
-            ),
             'XfnRestaurant_driver' => array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
@@ -153,7 +145,6 @@ return array(
             ),
             'orm_default' => array(
                 'drivers' => array(
-                    'Album\Entity' => 'Album_driver',
                     'XfnRestaurant\Entity' => 'XfnRestaurant_driver',
                 ),
             )

@@ -4,7 +4,6 @@ return array(
         'Application',
         'DoctrineModule',
         'DoctrineORMModule',
-        'Album',
         'XfnRestaurant',
     ),
     'module_listener_options' => array(

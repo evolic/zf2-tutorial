@@ -5,7 +5,7 @@
 .DS_Store
 Thumbs.db
 /data/cache
-/data/log
+/data/log/*.log
 ._*
 .~lock.*
 /composer.lock

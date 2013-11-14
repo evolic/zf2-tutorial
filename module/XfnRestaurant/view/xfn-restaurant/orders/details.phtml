@@ -1,0 +1,73 @@
+<?php
+// module/XfnRestaurant/view/xfn-restaurant/orders/details.phtml:
+$firephp = \FirePHP::getInstance();
+$firephp->info($this->locale);
+$title = 'Details of order no. ' . $this->id;
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<?php if ($order): ?>
+<table class="table order">
+<thead>
+    <tr>
+        <th style="width: 30px;"><?php echo $this->translate('#'); ?></th>
+        <th style="width: 450px;"><?php echo $this->translate('Name'); ?></th>
+        <th style="width: 100px;"><?php echo $this->translate('Cuisine'); ?></th>
+        <th class="price"><?php echo $this->translate('Price'); ?></th>
+    </tr>
+</thead>
+<tbody>
+    <?php
+    $idx = 0;
+    $sum = 0.0;
+    ?>
+    <?php foreach ($order->lunches as $lunch) : ?>
+    <?php
+    if ($lunch->meal) {
+        $sum += $lunch->meal->price;
+    }
+    if ($lunch->dessert) {
+        $sum += $lunch->dessert->price;
+    }
+    ?>
+    <?php if ($lunch->meal): ?>
+    <tr>
+        <td><?php echo ++$idx; ?></td>
+        <td class="name meal"><?php echo $this->escapeHtml($lunch->meal->name);?></td>
+        <td><?php echo $lunch->meal->cuisine->name;?></td>
+        <td class="price"><?php echo $lunch->meal->price;?> PLN</td>
+    </tr>
+    <?php endif; ?>
+    <?php if ($lunch->dessert): ?>
+    <tr>
+        <td><?php echo ++$idx; ?></td>
+        <td class="name dessert"><?php echo $this->escapeHtml($lunch->dessert->name);?></td>
+        <td></td>
+        <td class="price"><?php echo $lunch->dessert->price;?> PLN</td>
+    </tr>
+    <?php endif; ?>
+    <?php endforeach; ?>
+    <?php foreach ($order->drinks2order as $drink2order) : ?>
+    <?php
+    $sum += $drink2order->drink->price;
+    ?>
+    <tr>
+        <td><?php echo ++$idx; ?></td>
+        <td class="name drink"><?php echo $this->escapeHtml($drink2order->drink->name);?></td>
+        <td></td>
+        <td class="price"><?php echo $drink2order->drink->price;?> PLN</td>
+    </tr>
+    <?php endforeach; ?>
+</tbody>
+<tfoot>
+    <tr>
+        <th colspan="3"></th>
+        <th class="price"><?php echo $sum;?> PLN</th>
+    </tr>
+</tfoot>
+</table>
+
+<?php else: ?>
+<p><?php echo $this->translate('Order was not found.'); ?></p>
+<?php endif; ?>

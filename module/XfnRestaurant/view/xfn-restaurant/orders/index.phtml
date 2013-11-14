@@ -1,0 +1,64 @@
+<?php
+// module/XfnRestaurant/view/xfn-restaurant/orders/index.phtml:
+$firephp = \FirePHP::getInstance();
+$firephp->info($this->locale);
+$title = 'Orders list';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<p>
+    <a href="<?php echo $this->url('restaurant/orders/make', array(
+        'locale' => $this->locale,
+        'action'=>'make'
+    ));?>"><?php echo $this->translate('Make new order'); ?></a>
+</p>
+
+<?php if ($orders): ?>
+<table class="table orders">
+<thead>
+    <tr>
+        <th style="width: 30px;"><a href="<?php echo $this->url('restaurant/orders/general', array(
+            'locale' => $this->locale,
+            'action'=>'index',
+            'order_by' => '',
+        ));?>"><?php echo $this->translate('#'); ?></a></th>
+        <th style="width: 40px;"><?php echo $this->translate('ID'); ?></th>
+        <th style="width: 250px;"><a href="<?php echo $this->url('restaurant/orders/general', array(
+            'locale' => $this->locale,
+            'action'=> 'index',
+            'order_by' => 'created_at',
+        ));?>"><?php echo $this->translate('Created at'); ?></a></th>
+        <th class="price"><a href="<?php echo $this->url('restaurant/orders/general', array(
+            'locale' => $this->locale,
+            'action'=>'index',
+            'order_by' => 'price',
+        ));?>"><?php echo $this->translate('Price'); ?></a></th>
+        <th>&nbsp;</th>
+    </tr>
+</thead>
+<tbody>
+    <?php $idx = 0; ?>
+    <?php foreach ($orders as $order) : ?>
+    <tr>
+        <td><?php echo ++$idx; ?></td>
+        <td><?php echo $order['id']; ?></td>
+        <td class="datetime"><?php echo $this->escapeHtml($order['created_at']->format('Y-m-d H:i'));?></td>
+        <td class="price"><?php echo $order['price'];?> PLN</td>
+        <td>
+            <a href="<?php echo $this->url('restaurant/orders/general',
+                array('locale' => $this->locale, 'action'=>'details', 'id' => $order['id'])
+            );?>"><?php echo $this->translate('Details'); ?></a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+</tbody>
+</table>
+
+<p><?php
+$count = count($orders);
+$message = $this->translatePlural('Found %d order.', 'Found %d orders.', $count, 'order', $this->locale);
+echo sprintf($message, $count);
+?></p>
+<?php else:?>
+<p><?php echo $this->translate('No order was found.'); ?></p>
+<?php endif; ?>

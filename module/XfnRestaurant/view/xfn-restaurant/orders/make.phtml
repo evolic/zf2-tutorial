@@ -1,0 +1,23 @@
+<?php
+// module/XfnRestaurant/view/xfn-restaurant/orders/details.phtml:
+$firephp = \FirePHP::getInstance();
+$firephp->info($this->locale);
+$title = 'Make a new order';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url(
+    'restaurant/orders/make',
+    array(
+        'locale' => $this->locale,
+    )
+));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formRow($form->get('type'));
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();

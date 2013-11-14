@@ -1,0 +1,94 @@
+
+table.orders {
+  width: 380px;
+}
+
+table.order {
+  width: 540px;
+}
+
+table thead th.price {
+  width: 60px;
+}
+
+table tbody td.price {
+  text-align: right;
+}
+
+table tfoot th.price {
+  text-align: right;
+}
+
+table.table tbody td {
+  line-height: 36px;
+}
+
+table tbody td.datetime {
+  padding-left: 24px;
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-image: url('../i/ico/frankfurt-icons/16/order-192.png');
+}
+
+table tbody td.name {
+  padding-left: 56px;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+
+table tbody td.meal {
+  background-image: url('../i/ico/free-food-icons/48x48/dish.png');
+}
+table tbody td.dessert {
+  background-image: url('../i/ico/free-food-icons/48x48/cake.png');
+}
+table tbody td.drink {
+  background-image: url('../i/ico/free-food-icons/48x48/champagne.png');
+}
+
+/** Order form **/
+
+form#order-main-form {
+  
+}
+
+form#order-main-form fieldset label.type {
+  margin-bottom: 20px;
+}
+form#order-main-form fieldset label.type:after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 64px;
+  background-position: left center;
+  background-repeat: no-repeat;
+}
+form#order-main-form fieldset label.type:after {
+  background-image: url('../i/ico/awt-travel-blue-icons/64x64/AWT-Meal.png');
+}
+form#order-main-form fieldset label.type + label.type:after {
+  background-image: url('../i/ico/awt-travel-blue-icons/64x64/AWT-Drink.png');
+}
+
+form#order-main-form fieldset label input[type="radio"] {
+  display: inline;
+  margin-right: 5px;
+}
+
+form .row {
+  clear: both;
+  margin-left: 0;
+}
+
+form .row.checkbox-ct label {
+  display: inline;
+  margin-left: 5px;
+}
+
+form .row input[type="checkbox"] {
+  float: left;
+}
+
+form .row.submit-ct {
+  margin-top: 10px;
+}

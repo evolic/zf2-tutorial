@@ -122,6 +122,18 @@ return array(
 
     // Doctrine config
     'doctrine' => array(
+        'eventmanager' => array(
+            'orm_default' => array(
+                'subscribers' => array(
+                    // pick any listeners you need
+//                     'Gedmo\Tree\TreeListener',
+                    'Gedmo\Timestampable\TimestampableListener',
+                    'Gedmo\Sluggable\SluggableListener',
+//                     'Gedmo\Loggable\LoggableListener',
+//                     'Gedmo\Sortable\SortableListener'
+                ),
+            ),
+        ),
         'driver' => array(
             'Album_driver' => array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
@@ -131,9 +143,18 @@ return array(
                     str_replace('\\', '/', realpath(__DIR__ . '/../../Album/src/Album/Entity')) // windows
                 )
             ),
+            'XfnRestaurant_driver' => array(
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => array(
+//                     realpath(__DIR__ . '/../../XfnRestaurant/src/XfnRestaurant/Entity'),
+                    str_replace('\\', '/', realpath(__DIR__ . '/../../XfnRestaurant/src/XfnRestaurant/Entity')) // windows
+                )
+            ),
             'orm_default' => array(
                 'drivers' => array(
                     'Album\Entity' => 'Album_driver',
+                    'XfnRestaurant\Entity' => 'XfnRestaurant_driver',
                 ),
             )
         )

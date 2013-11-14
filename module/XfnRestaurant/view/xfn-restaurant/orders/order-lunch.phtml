@@ -1,0 +1,38 @@
+<?php
+// module/XfnRestaurant/view/xfn-restaurant/orders/details.phtml:
+$firephp = \FirePHP::getInstance();
+$firephp->info($this->locale);
+$title = 'Ordr lunch';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url(
+    'restaurant/orders/order-lunch',
+    array(
+        'locale' => $this->locale,
+    )
+));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+<div class="row">
+<?php
+echo $this->formRow($form->get('main-course'));
+?>
+</div>
+<div class="row">
+<?php
+echo $this->formRow($form->get('dessert'));
+?>
+</div>
+<div class="row submit-ct">
+<?php
+echo $this->formSubmit($form->get('submit'));
+?>
+</div>
+<?php
+echo $this->form()->closeTag();

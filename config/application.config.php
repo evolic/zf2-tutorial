@@ -5,6 +5,7 @@ return array(
         'DoctrineModule',
         'DoctrineORMModule',
         'Album',
+        'XfnRestaurant',
     ),
     'module_listener_options' => array(
         'config_glob_paths'    => array(

@@ -16,6 +16,7 @@ $firephp->info($locale);
     <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'))
                     ->appendStylesheet($this->basePath() . '/css/bootstrap.min.css')
                     ->appendStylesheet($this->basePath() . '/css/style.css')
+                    ->appendStylesheet($this->basePath() . '/css/restaurant.css')
                     ->appendStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css') ?>
 
     <!-- Scripts -->
@@ -46,6 +47,8 @@ $firephp->info($locale);
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="<?php echo $this->url('home', array('locale' => $this->locale)); ?>"><?php echo $this->translate('Home') ?></a></li>
+              <li class=""><a href="<?php echo $this->url('restaurant/orders', array('locale' => $this->locale)); ?>"><?php echo $this->translate('Restaurant') ?></a></li>
+              <li class=""><a href="<?php echo $this->url('restaurant/orders/make', array('locale' => $this->locale)); ?>"><?php echo $this->translate('Make an order') ?></a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -53,6 +56,31 @@ $firephp->info($locale);
     </div>
 
     <div class="container">
+
+<?php
+
+if ($this->messages || $this->errors) {
+    if (is_array($this->messages)) {
+        foreach($this->messages as $message)
+        {
+            echo '<div class="alert alert-success fade in">' .
+                    '<button data-dismiss="alert" class="close" type="button">×</button>' .
+                    $message .
+                '</div>';
+        }
+    }
+
+    if (is_array($this->errors)) {
+        foreach($this->errors as $error)
+        {
+            echo '<div class="alert alert-error fade in">' .
+                    '<button data-dismiss="alert" class="close" type="button">×</button>' .
+                    $error .
+                '</div>';
+        }
+    }
+}
+?>
 
       <?php echo $this->content; ?>
 
